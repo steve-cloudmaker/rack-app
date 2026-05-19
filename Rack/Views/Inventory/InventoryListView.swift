@@ -22,10 +22,13 @@ struct InventoryListView: View {
 
     var body: some View {
         NavigationStack {
-            List(filteredItems) { item in
-                NavigationLink(destination: ItemDetailView(item: item)) {
-                    ItemRowView(item: item)
+            List {
+                ForEach(filteredItems) { item in
+                    NavigationLink(destination: ItemDetailView(item: item)) {
+                        ItemRowView(item: item)
+                    }
                 }
+                .onDelete(perform: deleteItems)
             }
             .searchable(text: $searchText, prompt: "Search items")
             .navigationTitle("Rack")
@@ -51,6 +54,12 @@ struct InventoryListView: View {
                     )
                 }
             }
+        }
+    }
+
+    private func deleteItems(at offsets: IndexSet) {
+        for index in offsets {
+            modelContext.delete(filteredItems[index])
         }
     }
 
