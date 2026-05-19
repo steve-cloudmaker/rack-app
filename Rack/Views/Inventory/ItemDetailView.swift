@@ -205,9 +205,9 @@ struct ItemDetailView: View {
                 }
             }
 
-            if draft.status.isForSelling {
+            if draft.status.isForSelling || draft.status.isForDonating {
                 HStack {
-                    Text("Listing Price")
+                    Text(draft.status.isForDonating ? "Donation Value" : "Listing Price")
                     Spacer()
                     if isEstimatingPrice {
                         ProgressView().scaleEffect(0.8)
