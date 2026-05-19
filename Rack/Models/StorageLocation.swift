@@ -10,7 +10,7 @@ final class StorageLocation {
     var createdAt: Date = Date()
 
     @Relationship(deleteRule: .nullify, inverse: \ClothingItem.location)
-    var items: [ClothingItem] = []
+    var items: [ClothingItem]?
 
     init(name: String, rack: String = "", row: String = "") {
         self.name = name

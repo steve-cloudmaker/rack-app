@@ -8,7 +8,7 @@ final class Person {
     var createdAt: Date = Date()
 
     @Relationship(deleteRule: .nullify, inverse: \ClothingItem.owner)
-    var items: [ClothingItem] = []
+    var items: [ClothingItem]?
 
     init(name: String) {
         self.name = name

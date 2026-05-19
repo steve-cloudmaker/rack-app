@@ -12,7 +12,7 @@ struct LocationsView: View {
                 ForEach(locations) { location in
                     VStack(alignment: .leading, spacing: 4) {
                         Text(location.displayLabel)
-                        Text("\(location.items.count) items")
+                        Text("\(location.items?.count ?? 0) items")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

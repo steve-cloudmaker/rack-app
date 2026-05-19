@@ -14,7 +14,7 @@ struct PeopleView: View {
                     HStack {
                         Text(person.name)
                         Spacer()
-                        Text("\(person.items.count) items")
+                        Text("\(person.items?.count ?? 0) items")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

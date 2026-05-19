@@ -23,7 +23,7 @@ final class ClothingItem {
     var salePrice: Double?
 
     @Relationship(deleteRule: .cascade, inverse: \ItemPhoto.item)
-    var photos: [ItemPhoto] = []
+    var photos: [ItemPhoto]?
 
     var owner: Person?
     var location: StorageLocation?
@@ -65,7 +65,7 @@ final class ClothingItem {
     // MARK: - Derived helpers
 
     var sortedPhotos: [ItemPhoto] {
-        photos.sorted { $0.sortOrder < $1.sortOrder }
+        (photos ?? []).sorted { $0.sortOrder < $1.sortOrder }
     }
 
     var displayTitle: String {

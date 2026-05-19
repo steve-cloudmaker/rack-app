@@ -314,12 +314,12 @@ struct ItemDetailView: View {
         item.location = locations.first { $0.id == draft.locationID }
 
         // Delete old photos, then insert new ones into context before wiring relationship
-        item.photos.forEach { modelContext.delete($0) }
+        item.photos?.forEach { modelContext.delete($0) }
         item.photos = []
         for (index, data) in photoData.enumerated() {
             let photo = ItemPhoto(imageData: data, sortOrder: index)
             modelContext.insert(photo)
-            item.photos.append(photo)
+            item.photos?.append(photo)
         }
 
         dismiss()
