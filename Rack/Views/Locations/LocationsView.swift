@@ -16,9 +16,11 @@ struct LocationsView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
+                    .listRowBackground(Color(.secondarySystemGroupedBackground).opacity(0.70))
                 }
                 .onDelete(perform: deleteLocations)
             }
+            .scrollContentBackground(.hidden)
             .navigationTitle("Locations")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -40,6 +42,7 @@ struct LocationsView: View {
                 AddLocationView()
             }
         }
+        .background(TartanView().ignoresSafeArea().opacity(0.20))
     }
 
     private func deleteLocations(at offsets: IndexSet) {

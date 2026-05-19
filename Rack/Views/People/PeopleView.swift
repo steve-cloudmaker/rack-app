@@ -18,9 +18,11 @@ struct PeopleView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
+                    .listRowBackground(Color(.secondarySystemGroupedBackground).opacity(0.70))
                 }
                 .onDelete(perform: deletePeople)
             }
+            .scrollContentBackground(.hidden)
             .navigationTitle("People")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -44,6 +46,7 @@ struct PeopleView: View {
                 Button("Cancel", role: .cancel) { newPersonName = "" }
             }
         }
+        .background(TartanView().ignoresSafeArea().opacity(0.20))
     }
 
     private func addPerson() {

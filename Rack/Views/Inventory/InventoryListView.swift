@@ -27,9 +27,11 @@ struct InventoryListView: View {
                     NavigationLink(destination: ItemDetailView(item: item)) {
                         ItemRowView(item: item)
                     }
+                    .listRowBackground(Color(.secondarySystemGroupedBackground).opacity(0.70))
                 }
                 .onDelete(perform: deleteItems)
             }
+            .scrollContentBackground(.hidden)
             .searchable(text: $searchText, prompt: "Search items")
             .navigationTitle("Rack")
             .toolbar {
@@ -55,6 +57,7 @@ struct InventoryListView: View {
                 }
             }
         }
+        .background(TartanView().ignoresSafeArea().opacity(0.20))
     }
 
     private func deleteItems(at offsets: IndexSet) {

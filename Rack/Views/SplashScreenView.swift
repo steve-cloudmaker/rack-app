@@ -25,25 +25,25 @@ struct SplashScreenView: View {
     private func animate() {
         let screenWidth = UIScreen.main.bounds.width
 
-        // Slide in from left
-        withAnimation(.easeOut(duration: 0.65)) {
+        // Slide in from left (0.0 – 0.8s)
+        withAnimation(.easeOut(duration: 0.8)) {
             textOffset = 0
         }
 
-        // Pause, then slide out to right
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
-            withAnimation(.easeIn(duration: 0.5)) {
+        // Pause, then slide out to right (4.0 – 4.7s)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+            withAnimation(.easeIn(duration: 0.7)) {
                 textOffset = screenWidth
             }
         }
 
-        // Fade out and dismiss
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            withAnimation(.easeOut(duration: 0.25)) {
+        // Fade out (4.4s) and dismiss (5.0s)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.4) {
+            withAnimation(.easeOut(duration: 0.35)) {
                 opacity = 0
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.25) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             onComplete()
         }
     }

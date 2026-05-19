@@ -41,7 +41,9 @@ struct SettingsView: View {
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
                 }
             }
+            .scrollContentBackground(.hidden)
             .navigationTitle("Settings")
         }
+        .background(TartanView().ignoresSafeArea().opacity(0.20))
     }
 }

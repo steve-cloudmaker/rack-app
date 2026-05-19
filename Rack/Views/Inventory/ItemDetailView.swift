@@ -235,6 +235,9 @@ struct ItemDetailView: View {
     private func save() {
         let item = existingItem ?? ClothingItem()
 
+        // Insert new items before setting any relationships
+        if isNew { modelContext.insert(item) }
+
         item.itemDescription = draft.itemDescription
         item.brand = draft.brand
         item.color = draft.color
@@ -251,15 +254,14 @@ struct ItemDetailView: View {
         item.owner = people.first { $0.id == draft.ownerID }
         item.location = locations.first { $0.id == draft.locationID }
 
-        // Sync photos
+        // Delete old photos, then insert new ones into context before wiring relationship
         item.photos.forEach { modelContext.delete($0) }
+        item.photos = []
         for (index, data) in photoData.enumerated() {
             let photo = ItemPhoto(imageData: data, sortOrder: index)
-            photo.item = item
             modelContext.insert(photo)
+            item.photos.append(photo)
         }
-
-        if isNew { modelContext.insert(item) }
 
         dismiss()
     }
