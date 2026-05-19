@@ -34,7 +34,7 @@ struct InventoryListView: View {
             .scrollContentBackground(.hidden)
             .background(TartanView().ignoresSafeArea().opacity(0.20))
             .searchable(text: $searchText, prompt: "Search items")
-            .navigationTitle("Cedar")
+            .navigationTitle("Cedar Closet Manager")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button(action: { showingAddItem = true }) {
@@ -97,7 +97,7 @@ struct ItemRowView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color(.systemGray5))
                     .frame(width: 56, height: 56)
-                    .overlay(Image(systemName: "tshirt").foregroundStyle(.secondary))
+                    .overlay(Image(systemName: item.clothingType == .shoes ? "shoe" : "tshirt").foregroundStyle(.secondary))
             }
 
             VStack(alignment: .leading, spacing: 4) {
@@ -105,8 +105,8 @@ struct ItemRowView: View {
                     .font(.body)
                     .lineLimit(1)
                 HStack(spacing: 6) {
-                    if let size = item.size {
-                        Text(size.displayName)
+                    if let sizeDisplay = item.clothingType == .shoes ? item.shoeSize?.contextualDisplayName : item.size?.displayName {
+                        Text(sizeDisplay)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
