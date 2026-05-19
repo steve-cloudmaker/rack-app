@@ -1,4 +1,4 @@
-name: Rack
+name: Cedar
 options:
   bundleIdPrefix: com.stevedaurora
   deploymentTarget:
@@ -7,7 +7,7 @@ options:
   createIntermediateGroups: true
 
 targets:
-  Rack:
+  Cedar:
     type: application
     platform: iOS
     deploymentTarget: "17.0"
@@ -17,12 +17,12 @@ targets:
           - "**/.DS_Store"
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.stevedaurora.rack
+        PRODUCT_BUNDLE_IDENTIFIER: com.stevedaurora.cedar
         SWIFT_VERSION: "5.9"
         TARGETED_DEVICE_FAMILY: "1,2"
         SUPPORTS_MACCATALYST: YES
         INFOPLIST_FILE: Rack/Info.plist
-        CODE_SIGN_ENTITLEMENTS: Rack/Rack.entitlements
+        CODE_SIGN_ENTITLEMENTS: Rack/Cedar.entitlements
         DEVELOPMENT_TEAM: ""
         CODE_SIGN_STYLE: Automatic
       configs:
@@ -33,10 +33,10 @@ targets:
           SWIFT_OPTIMIZATION_LEVEL: "-O"
 
 schemes:
-  Rack:
+  Cedar:
     build:
       targets:
-        Rack: all
+        Cedar: all
     run:
       config: Debug
     test:

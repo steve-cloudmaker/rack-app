@@ -11,9 +11,9 @@ struct SplashScreenView: View {
             TartanView()
                 .ignoresSafeArea()
 
-            Text("RACK")
-                .font(.system(size: 96, weight: .black, design: .default))
-                .tracking(24)
+            Text("CEDAR")
+                .font(.system(size: 80, weight: .black, design: .default))
+                .tracking(16)
                 .foregroundStyle(.white)
                 .shadow(color: .black.opacity(0.5), radius: 6, x: 0, y: 3)
                 .offset(x: textOffset)

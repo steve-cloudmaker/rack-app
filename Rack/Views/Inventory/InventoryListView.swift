@@ -34,7 +34,7 @@ struct InventoryListView: View {
             .scrollContentBackground(.hidden)
             .background(TartanView().ignoresSafeArea().opacity(0.20))
             .searchable(text: $searchText, prompt: "Search items")
-            .navigationTitle("Rack")
+            .navigationTitle("Cedar")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button(action: { showingAddItem = true }) {

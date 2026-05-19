@@ -21,9 +21,9 @@
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSCameraUsageDescription</key>
-    <string>Rack uses your camera to take photos of clothing items.</string>
+    <string>Cedar uses your camera to take photos of clothing items.</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Rack accesses your photo library to add photos to clothing items.</string>
+    <string>Cedar accesses your photo library to add photos to clothing items.</string>
     <key>UIApplicationSceneManifest</key>
     <dict>
         <key>UIApplicationSupportsMultipleScenes</key>

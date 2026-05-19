@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct RackApp: App {
+struct CedarApp: App {
     let container: ModelContainer
 
     init() {
@@ -12,14 +12,14 @@ struct RackApp: App {
             StorageLocation.self,
             ItemPhoto.self
         ])
-        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .private("iCloud.com.stevedaurora.rack"))
+        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .private("iCloud.com.stevedaurora.cedar"))
         do {
             container = try ModelContainer(for: schema, configurations: [config])
         } catch {
             // The on-disk store was created before CloudKit was enabled and can't migrate.
             // Destroy it so SwiftData can create a CloudKit-compatible store from scratch.
-            print("[RackApp] ModelContainer init failed: \(error). Resetting local store.")
-            RackApp.destroyDefaultStore()
+            print("[CedarApp] ModelContainer init failed: \(error). Resetting local store.")
+            CedarApp.destroyDefaultStore()
             do {
                 container = try ModelContainer(for: schema, configurations: [config])
             } catch {

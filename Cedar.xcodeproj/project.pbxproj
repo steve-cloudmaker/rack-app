@@ -1,0 +1,459 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		04836138614246D65E4976EF /* ItemStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692282B73A61F53175A0273 /* ItemStatus.swift */; };
+		05350BD655A949C59CB3E06A /* ItemPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754ADC57F3EC2B31ECD79B54 /* ItemPhoto.swift */; };
+		1F9EA8EC5D6B6753B8387E47 /* ClothingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D230DFA585A31234CFBF5D66 /* ClothingType.swift */; };
+		2EA401C15906640158A85F6A /* CedarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CE3A2B6AAF69A1878EBEF7 /* CedarApp.swift */; };
+		39F39DAE59B1DCD39C760958 /* AgeGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF1B51F7190B32482B63D77 /* AgeGroup.swift */; };
+		4D847AB5893BF711082E89EB /* ItemCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C34A3DEAC255DDBB15C813 /* ItemCondition.swift */; };
+		529B861A9240DE6E6AC34397 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1978AA48ED3D59C967FC6E5 /* AIService.swift */; };
+		8345210F4108C706EB05C5D9 /* ClothingSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0115B82BAD38E7794BF2699 /* ClothingSize.swift */; };
+		8CC3802BBA6EB710CDAE327C /* StorageLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DB78D6FF68C51C97A15882 /* StorageLocation.swift */; };
+		8D0086EE0C488BDBDFCE34DF /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11186F531BC73E824CF415EC /* SplashScreenView.swift */; };
+		98BB9565A30B3D9DE818D86D /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D7A62421066013A2B5C8D95 /* Gender.swift */; };
+		9EC39CC313BDA2067F030DA8 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E7EA0AD8818E243C53D314 /* Person.swift */; };
+		A1B9145DECBF713CCC40B6E9 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB044DBC6ED7E7D00B0DC85 /* PeopleView.swift */; };
+		A63FFB3F72F64CAA0E8CF7EF /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B4C10381548B7BC4AC0BB2 /* LocationsView.swift */; };
+		B4BB46C8D7498661A85DFA4D /* ClothingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EF961A6D51449FE475A6B /* ClothingItem.swift */; };
+		BF119AFA484D66E182780643 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B04A912F5645094699D706 /* ItemDetailView.swift */; };
+		BF8369CCAFD2BD8985A494C0 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5608F3C55242C79A28E25EE9 /* SettingsView.swift */; };
+		C2A1BBE8855EC856F726309A /* InventoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14936AC8B5B4BE549D50079 /* InventoryListView.swift */; };
+		C8A2BCCB2AC472E9AFD847F7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B622DFE492799A23BB823A /* ContentView.swift */; };
+		FB449715D4702F3D68B25FA8 /* CSVImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6566E75CBE11B594977E2D /* CSVImporter.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		11186F531BC73E824CF415EC /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
+		15C34A3DEAC255DDBB15C813 /* ItemCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCondition.swift; sourceTree = "<group>"; };
+		1C6566E75CBE11B594977E2D /* CSVImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVImporter.swift; sourceTree = "<group>"; };
+		31B622DFE492799A23BB823A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3952275E671A71BF51CEFB90 /* Cedar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cedar.entitlements; sourceTree = "<group>"; };
+		5608F3C55242C79A28E25EE9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		5CF1B51F7190B32482B63D77 /* AgeGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeGroup.swift; sourceTree = "<group>"; };
+		64B4C10381548B7BC4AC0BB2 /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
+		754ADC57F3EC2B31ECD79B54 /* ItemPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemPhoto.swift; sourceTree = "<group>"; };
+		920EF961A6D51449FE475A6B /* ClothingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingItem.swift; sourceTree = "<group>"; };
+		98E7EA0AD8818E243C53D314 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		9D7A62421066013A2B5C8D95 /* Gender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gender.swift; sourceTree = "<group>"; };
+		A8DB78D6FF68C51C97A15882 /* StorageLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageLocation.swift; sourceTree = "<group>"; };
+		C1978AA48ED3D59C967FC6E5 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
+		C2B04A912F5645094699D706 /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
+		D0115B82BAD38E7794BF2699 /* ClothingSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingSize.swift; sourceTree = "<group>"; };
+		D230DFA585A31234CFBF5D66 /* ClothingType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingType.swift; sourceTree = "<group>"; };
+		D692282B73A61F53175A0273 /* ItemStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStatus.swift; sourceTree = "<group>"; };
+		D9380E223885884A27671DE4 /* Cedar.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Cedar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9CE3A2B6AAF69A1878EBEF7 /* CedarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CedarApp.swift; sourceTree = "<group>"; };
+		EFB044DBC6ED7E7D00B0DC85 /* PeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
+		F14936AC8B5B4BE549D50079 /* InventoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryListView.swift; sourceTree = "<group>"; };
+		FB1F707AAB77F0FC9BD734A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0B5FB90494B6E43CE2CF2C6E = {
+			isa = PBXGroup;
+			children = (
+				5F00AA8DF586EE53443ECD41 /* Rack */,
+				916ABEBC498F460FE3346327 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0C3B800C80AF2EFD285F5EB4 /* Inventory */ = {
+			isa = PBXGroup;
+			children = (
+				F14936AC8B5B4BE549D50079 /* InventoryListView.swift */,
+				C2B04A912F5645094699D706 /* ItemDetailView.swift */,
+			);
+			path = Inventory;
+			sourceTree = "<group>";
+		};
+		5F00AA8DF586EE53443ECD41 /* Rack */ = {
+			isa = PBXGroup;
+			children = (
+				3952275E671A71BF51CEFB90 /* Cedar.entitlements */,
+				FB1F707AAB77F0FC9BD734A2 /* Info.plist */,
+				6E729103AA022F977A9486EF /* App */,
+				C4CE4886EB562A626A24DE98 /* Enums */,
+				8EC16A798A427795D043F00A /* Models */,
+				CD5BAD8ADCC6C660E649CCD8 /* Services */,
+				9DD8FC5F66719A91E9336AB3 /* Utilities */,
+				FB88993F53B19191512D85CD /* Views */,
+			);
+			path = Rack;
+			sourceTree = "<group>";
+		};
+		6E729103AA022F977A9486EF /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E9CE3A2B6AAF69A1878EBEF7 /* CedarApp.swift */,
+				31B622DFE492799A23BB823A /* ContentView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		8EC16A798A427795D043F00A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				920EF961A6D51449FE475A6B /* ClothingItem.swift */,
+				754ADC57F3EC2B31ECD79B54 /* ItemPhoto.swift */,
+				98E7EA0AD8818E243C53D314 /* Person.swift */,
+				A8DB78D6FF68C51C97A15882 /* StorageLocation.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		916ABEBC498F460FE3346327 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D9380E223885884A27671DE4 /* Cedar.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		91BC513D5DC0DD61F052E304 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				5608F3C55242C79A28E25EE9 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		9DD8FC5F66719A91E9336AB3 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				1C6566E75CBE11B594977E2D /* CSVImporter.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		B75F5BC3800E7E8ED887092B /* Locations */ = {
+			isa = PBXGroup;
+			children = (
+				64B4C10381548B7BC4AC0BB2 /* LocationsView.swift */,
+			);
+			path = Locations;
+			sourceTree = "<group>";
+		};
+		BBBA241F41A103EE8D9F60C8 /* People */ = {
+			isa = PBXGroup;
+			children = (
+				EFB044DBC6ED7E7D00B0DC85 /* PeopleView.swift */,
+			);
+			path = People;
+			sourceTree = "<group>";
+		};
+		C4CE4886EB562A626A24DE98 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				5CF1B51F7190B32482B63D77 /* AgeGroup.swift */,
+				D0115B82BAD38E7794BF2699 /* ClothingSize.swift */,
+				D230DFA585A31234CFBF5D66 /* ClothingType.swift */,
+				9D7A62421066013A2B5C8D95 /* Gender.swift */,
+				15C34A3DEAC255DDBB15C813 /* ItemCondition.swift */,
+				D692282B73A61F53175A0273 /* ItemStatus.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		CD5BAD8ADCC6C660E649CCD8 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C1978AA48ED3D59C967FC6E5 /* AIService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		FB88993F53B19191512D85CD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				11186F531BC73E824CF415EC /* SplashScreenView.swift */,
+				0C3B800C80AF2EFD285F5EB4 /* Inventory */,
+				B75F5BC3800E7E8ED887092B /* Locations */,
+				BBBA241F41A103EE8D9F60C8 /* People */,
+				91BC513D5DC0DD61F052E304 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0392B7C334E5F981D6362BCF /* Cedar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8F61CF750C0DA5B715FC3069 /* Build configuration list for PBXNativeTarget "Cedar" */;
+			buildPhases = (
+				6B0E0F93818B1770CC5C509C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Cedar;
+			packageProductDependencies = (
+			);
+			productName = Cedar;
+			productReference = D9380E223885884A27671DE4 /* Cedar.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		27A8B55DE1CE8795249A48CD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					0392B7C334E5F981D6362BCF = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F8CB1A15B80C8FBE7375AC5C /* Build configuration list for PBXProject "Cedar" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 0B5FB90494B6E43CE2CF2C6E;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 916ABEBC498F460FE3346327 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0392B7C334E5F981D6362BCF /* Cedar */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6B0E0F93818B1770CC5C509C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				529B861A9240DE6E6AC34397 /* AIService.swift in Sources */,
+				39F39DAE59B1DCD39C760958 /* AgeGroup.swift in Sources */,
+				FB449715D4702F3D68B25FA8 /* CSVImporter.swift in Sources */,
+				2EA401C15906640158A85F6A /* CedarApp.swift in Sources */,
+				B4BB46C8D7498661A85DFA4D /* ClothingItem.swift in Sources */,
+				8345210F4108C706EB05C5D9 /* ClothingSize.swift in Sources */,
+				1F9EA8EC5D6B6753B8387E47 /* ClothingType.swift in Sources */,
+				C8A2BCCB2AC472E9AFD847F7 /* ContentView.swift in Sources */,
+				98BB9565A30B3D9DE818D86D /* Gender.swift in Sources */,
+				C2A1BBE8855EC856F726309A /* InventoryListView.swift in Sources */,
+				4D847AB5893BF711082E89EB /* ItemCondition.swift in Sources */,
+				BF119AFA484D66E182780643 /* ItemDetailView.swift in Sources */,
+				05350BD655A949C59CB3E06A /* ItemPhoto.swift in Sources */,
+				04836138614246D65E4976EF /* ItemStatus.swift in Sources */,
+				A63FFB3F72F64CAA0E8CF7EF /* LocationsView.swift in Sources */,
+				A1B9145DECBF713CCC40B6E9 /* PeopleView.swift in Sources */,
+				9EC39CC313BDA2067F030DA8 /* Person.swift in Sources */,
+				BF8369CCAFD2BD8985A494C0 /* SettingsView.swift in Sources */,
+				8D0086EE0C488BDBDFCE34DF /* SplashScreenView.swift in Sources */,
+				8CC3802BBA6EB710CDAE327C /* StorageLocation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		81375A20950FE634581F0D7A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Rack/Cedar.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = Rack/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.stevedaurora.cedar;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8652E7AACBCF53AABB178D3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Rack/Cedar.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = Rack/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.stevedaurora.cedar;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AEA78145C8DF49DC2739D980 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B39568CF50637C591D144767 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8F61CF750C0DA5B715FC3069 /* Build configuration list for PBXNativeTarget "Cedar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81375A20950FE634581F0D7A /* Debug */,
+				8652E7AACBCF53AABB178D3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F8CB1A15B80C8FBE7375AC5C /* Build configuration list for PBXProject "Cedar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AEA78145C8DF49DC2739D980 /* Debug */,
+				B39568CF50637C591D144767 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 27A8B55DE1CE8795249A48CD /* Project object */;
+}
