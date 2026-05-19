@@ -14,7 +14,7 @@ struct RackApp: App {
         ])
         // CloudKit sync requires a paid Apple Developer account.
         // To re-enable: change `.none` to `.private("iCloud.com.stevedaurora.rack")`
-        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
+        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .private("iCloud.com.stevedaurona.rack"))
         do {
             container = try ModelContainer(for: schema, configurations: [config])
         } catch {
