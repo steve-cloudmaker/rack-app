@@ -14,6 +14,7 @@
 		362B614ED6F6A121D37EE0B8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F622A8A66123E156A9CDB6D /* SettingsView.swift */; };
 		4936AC82E97CA831FAD0F851 /* ClothingSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ACDC6DF2614AA18E91E66F9 /* ClothingSize.swift */; };
 		53B46365F7C746A2AC741825 /* ItemPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732D87BD77109D9264D3F4FE /* ItemPhoto.swift */; };
+		67035BA6974EEAD7FC8FEED3 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C715AB10D011C1EBA3FD1493 /* SplashScreenView.swift */; };
 		795353382920082588F645A5 /* AgeGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E8DD0D251BA325B1D4A66B /* AgeGroup.swift */; };
 		797944D067615ECC16A47BD1 /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99215F2BAD54979EE5B5A26B /* Gender.swift */; };
 		83250B6E3C8D7C242FBC4501 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58A875DCB97051DD73ACACE /* PeopleView.swift */; };
@@ -47,7 +48,8 @@
 		853B2474CD9C9F3C6049FC71 /* ItemCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCondition.swift; sourceTree = "<group>"; };
 		99215F2BAD54979EE5B5A26B /* Gender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gender.swift; sourceTree = "<group>"; };
 		C436EEA636543E786E3CD37E /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
-		C70249447B216A2D42BF586A /* Rack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C70249447B216A2D42BF586A /* Rack.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Rack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C715AB10D011C1EBA3FD1493 /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		D58A875DCB97051DD73ACACE /* PeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
 		D5914D29AB7E4450CA87E1BD /* StorageLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageLocation.swift; sourceTree = "<group>"; };
 		F11EF74B7140652EC31D35A2 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 		3FD5653ACC15A0013DD5171C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C715AB10D011C1EBA3FD1493 /* SplashScreenView.swift */,
 				4E175C283935C7B464091B4C /* Inventory */,
 				BF291C38B2A81C6CF4BE99EF /* Locations */,
 				016FB7C7E17201CE754F04F9 /* People */,
@@ -205,7 +208,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2640;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					29EE4C89C5E787588C196F9E = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = 1438001BE266ABAC78B7B04E /* Build configuration list for PBXProject "Rack" */;
 			developmentRegion = en;
@@ -249,6 +258,7 @@
 				AA198FE041E33BBA70EA60C7 /* Person.swift in Sources */,
 				F15262E5694D77720201A1E8 /* RackApp.swift in Sources */,
 				362B614ED6F6A121D37EE0B8 /* SettingsView.swift in Sources */,
+				67035BA6974EEAD7FC8FEED3 /* SplashScreenView.swift in Sources */,
 				30ED1E83CB8FFD15D643ECC5 /* StorageLocation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,9 +271,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Rack/Rack.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Rack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -271,7 +282,6 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stevedaurora.rack;
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -315,10 +325,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -332,7 +340,6 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -374,10 +381,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -398,7 +403,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -410,9 +414,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Rack/Rack.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Rack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -420,7 +425,6 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stevedaurora.rack;
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.9;

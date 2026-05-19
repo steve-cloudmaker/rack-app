@@ -1,7 +1,13 @@
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.undoManager) private var undoManager
+    @State private var showSplash = true
+
     var body: some View {
+        ZStack {
         TabView {
             InventoryListView()
                 .tabItem {
@@ -23,5 +29,15 @@ struct ContentView: View {
                     Label("Settings", systemImage: "gear")
                 }
         }
+        .onAppear {
+            modelContext.undoManager = undoManager
+        }
+
+        if showSplash {
+            SplashScreenView { showSplash = false }
+                .ignoresSafeArea()
+                .zIndex(1)
+        }
+        } // ZStack
     }
 }
