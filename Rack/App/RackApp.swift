@@ -12,7 +12,7 @@ struct RackApp: App {
             StorageLocation.self,
             ItemPhoto.self
         ])
-        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .private("iCloud.com.stevedaurona.rack"))
+        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .private("iCloud.com.stevedaurora.rack"))
         do {
             container = try ModelContainer(for: schema, configurations: [config])
         } catch {
