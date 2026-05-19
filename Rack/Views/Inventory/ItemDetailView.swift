@@ -161,6 +161,9 @@ struct ItemDetailView: View {
                 if let size = draft.size, !ClothingSize.available(for: newGroup).contains(size) {
                     draft.size = nil
                 }
+                if let shoeSize = draft.shoeSize, !ShoeSize.available(for: newGroup).contains(shoeSize) {
+                    draft.shoeSize = nil
+                }
             }
 
             Picker("Gender", selection: $draft.gender) {
@@ -174,13 +177,33 @@ struct ItemDetailView: View {
                     Text(type.displayName).tag(type)
                 }
             }
+            .onChange(of: draft.clothingType) { _, newType in
+                if newType == .shoes {
+                    draft.size = nil
+                } else {
+                    draft.shoeSize = nil
+                }
+            }
 
-            Picker("Size", selection: $draft.size) {
-                Text("Select a size").tag(Optional<ClothingSize>.none)
-                ForEach(ClothingSize.grouped(for: draft.ageGroup), id: \.0) { category, sizes in
-                    Section(category.rawValue) {
-                        ForEach(sizes) { size in
-                            Text(size.displayName).tag(Optional(size))
+            if draft.clothingType == .shoes {
+                Picker("Shoe Size", selection: $draft.shoeSize) {
+                    Text("Select a size").tag(Optional<ShoeSize>.none)
+                    ForEach(ShoeSize.grouped(for: draft.ageGroup), id: \.0) { category, sizes in
+                        Section(category.rawValue) {
+                            ForEach(sizes) { size in
+                                Text(size.displayName).tag(Optional(size))
+                            }
+                        }
+                    }
+                }
+            } else {
+                Picker("Size", selection: $draft.size) {
+                    Text("Select a size").tag(Optional<ClothingSize>.none)
+                    ForEach(ClothingSize.grouped(for: draft.ageGroup), id: \.0) { category, sizes in
+                        Section(category.rawValue) {
+                            ForEach(sizes) { size in
+                                Text(size.displayName).tag(Optional(size))
+                            }
                         }
                     }
                 }
@@ -285,6 +308,7 @@ struct ItemDetailView: View {
             type: draft.clothingType,
             condition: draft.condition,
             size: draft.size,
+            shoeSize: draft.shoeSize,
             ageGroup: draft.ageGroup
         ) {
             draft.listingPrice = price
@@ -306,6 +330,7 @@ struct ItemDetailView: View {
         item.gender = draft.gender
         item.condition = draft.condition
         item.size = draft.size
+        item.shoeSize = draft.shoeSize
         item.listingPrice = draft.listingPrice
         item.salePrice = draft.salePrice
         item.updatedAt = Date()
@@ -373,6 +398,7 @@ struct ItemDraft {
     var gender: Gender = .unisex
     var condition: ItemCondition = .good
     var size: ClothingSize? = nil
+    var shoeSize: ShoeSize? = nil
     var listingPrice: Double? = nil
     var salePrice: Double? = nil
     var ownerID: UUID? = nil
@@ -390,6 +416,7 @@ struct ItemDraft {
         gender = item.gender
         condition = item.condition
         size = item.size
+        shoeSize = item.shoeSize
         listingPrice = item.listingPrice
         salePrice = item.salePrice
         ownerID = item.owner?.id

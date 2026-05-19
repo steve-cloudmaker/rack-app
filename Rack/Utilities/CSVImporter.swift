@@ -7,7 +7,7 @@ struct CSVImportError: Error, LocalizedError {
 }
 
 struct CSVImporter {
-    static let expectedHeaders = ["description", "brand", "color", "size", "type", "ageGroup", "gender", "condition", "status", "owner", "rack", "row", "location", "listingPrice", "salePrice"]
+    static let expectedHeaders = ["description", "brand", "color", "size", "shoeSize", "type", "ageGroup", "gender", "condition", "status", "owner", "rack", "row", "location", "listingPrice", "salePrice"]
 
     static func `import`(from url: URL, context: ModelContext) throws -> Int {
         let contents = try String(contentsOf: url, encoding: .utf8)
@@ -32,6 +32,9 @@ struct CSVImporter {
 
             if let sizeStr = fields["size"], let size = ClothingSize(rawValue: sizeStr) {
                 item.size = size
+            }
+            if let sizeStr = fields["shoesize"], let size = ShoeSize(rawValue: sizeStr) {
+                item.shoeSize = size
             }
             if let typeStr = fields["type"], let type = ClothingType(rawValue: typeStr) {
                 item.clothingType = type

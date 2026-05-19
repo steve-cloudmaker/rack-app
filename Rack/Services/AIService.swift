@@ -49,15 +49,17 @@ actor AIService {
         type: ClothingType,
         condition: ItemCondition,
         size: ClothingSize?,
+        shoeSize: ShoeSize?,
         ageGroup: AgeGroup
     ) async -> Double? {
         guard isConfigured else { return nil }
 
+        let sizeDisplay = type == .shoes ? (shoeSize?.contextualDisplayName ?? "Unknown") : (size?.displayName ?? "Unknown")
         let details = [
             "Type: \(type.displayName)",
             "Brand: \(brand.isEmpty ? "Unknown" : brand)",
             "Condition: \(condition.displayName)",
-            "Size: \(size?.displayName ?? "Unknown")",
+            "Size: \(sizeDisplay)",
             "Age group: \(ageGroup.displayName)"
         ].joined(separator: "\n")
 

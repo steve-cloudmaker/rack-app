@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		04836138614246D65E4976EF /* ItemStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692282B73A61F53175A0273 /* ItemStatus.swift */; };
 		05350BD655A949C59CB3E06A /* ItemPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754ADC57F3EC2B31ECD79B54 /* ItemPhoto.swift */; };
+		1A5E7C25FC4B9E9CDA7BB8C0 /* ShoeSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECE38D4BBC90EC23097C230 /* ShoeSize.swift */; };
 		1F9EA8EC5D6B6753B8387E47 /* ClothingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D230DFA585A31234CFBF5D66 /* ClothingType.swift */; };
 		2EA401C15906640158A85F6A /* CedarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CE3A2B6AAF69A1878EBEF7 /* CedarApp.swift */; };
 		39F39DAE59B1DCD39C760958 /* AgeGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF1B51F7190B32482B63D77 /* AgeGroup.swift */; };
@@ -35,6 +36,7 @@
 		11186F531BC73E824CF415EC /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		15C34A3DEAC255DDBB15C813 /* ItemCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCondition.swift; sourceTree = "<group>"; };
 		1C6566E75CBE11B594977E2D /* CSVImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVImporter.swift; sourceTree = "<group>"; };
+		1ECE38D4BBC90EC23097C230 /* ShoeSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoeSize.swift; sourceTree = "<group>"; };
 		31B622DFE492799A23BB823A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3952275E671A71BF51CEFB90 /* Cedar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cedar.entitlements; sourceTree = "<group>"; };
 		5608F3C55242C79A28E25EE9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				9D7A62421066013A2B5C8D95 /* Gender.swift */,
 				15C34A3DEAC255DDBB15C813 /* ItemCondition.swift */,
 				D692282B73A61F53175A0273 /* ItemStatus.swift */,
+				1ECE38D4BBC90EC23097C230 /* ShoeSize.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -212,7 +215,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					0392B7C334E5F981D6362BCF = {
 						ProvisioningStyle = Automatic;
@@ -272,6 +275,7 @@
 				A1B9145DECBF713CCC40B6E9 /* PeopleView.swift in Sources */,
 				9EC39CC313BDA2067F030DA8 /* Person.swift in Sources */,
 				BF8369CCAFD2BD8985A494C0 /* SettingsView.swift in Sources */,
+				1A5E7C25FC4B9E9CDA7BB8C0 /* ShoeSize.swift in Sources */,
 				8D0086EE0C488BDBDFCE34DF /* SplashScreenView.swift in Sources */,
 				8CC3802BBA6EB710CDAE327C /* StorageLocation.swift in Sources */,
 			);
@@ -288,7 +292,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				INFOPLIST_FILE = Rack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -311,7 +314,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				INFOPLIST_FILE = Rack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -362,8 +364,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -384,6 +388,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -425,8 +430,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -440,6 +447,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;

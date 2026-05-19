@@ -14,6 +14,8 @@ enum ClothingType: String, Codable, CaseIterable, Identifiable {
     case matchingSet = "Matching Set"
     case onePiece = "One Piece"
     case pajamas = "Pajamas"
+    // All ages
+    case shoes = "Shoes"
 
     var id: String { rawValue }
     var displayName: String { rawValue }

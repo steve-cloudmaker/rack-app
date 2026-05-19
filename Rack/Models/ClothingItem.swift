@@ -18,6 +18,7 @@ final class ClothingItem {
     var genderRaw: String = Gender.unisex.rawValue
     var conditionRaw: String = ItemCondition.good.rawValue
     var sizeRaw: String = ""
+    var shoeSizeRaw: String = ""
 
     var listingPrice: Double?
     var salePrice: Double?
@@ -60,6 +61,11 @@ final class ClothingItem {
     var size: ClothingSize? {
         get { ClothingSize(rawValue: sizeRaw) }
         set { sizeRaw = newValue?.rawValue ?? ""; updatedAt = Date() }
+    }
+
+    var shoeSize: ShoeSize? {
+        get { ShoeSize(rawValue: shoeSizeRaw) }
+        set { shoeSizeRaw = newValue?.rawValue ?? ""; updatedAt = Date() }
     }
 
     // MARK: - Derived helpers
