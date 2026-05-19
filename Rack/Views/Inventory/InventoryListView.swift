@@ -32,6 +32,7 @@ struct InventoryListView: View {
                 .onDelete(perform: deleteItems)
             }
             .scrollContentBackground(.hidden)
+            .background(TartanView().ignoresSafeArea().opacity(0.20))
             .searchable(text: $searchText, prompt: "Search items")
             .navigationTitle("Rack")
             .toolbar {
@@ -57,7 +58,6 @@ struct InventoryListView: View {
                 }
             }
         }
-        .background(TartanView().ignoresSafeArea().opacity(0.20))
     }
 
     private func deleteItems(at offsets: IndexSet) {

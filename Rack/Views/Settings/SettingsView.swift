@@ -42,8 +42,8 @@ struct SettingsView: View {
                 }
             }
             .scrollContentBackground(.hidden)
+            .background(TartanView().ignoresSafeArea().opacity(0.20))
             .navigationTitle("Settings")
         }
-        .background(TartanView().ignoresSafeArea().opacity(0.20))
     }
 }

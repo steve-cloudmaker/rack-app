@@ -23,6 +23,7 @@ struct PeopleView: View {
                 .onDelete(perform: deletePeople)
             }
             .scrollContentBackground(.hidden)
+            .background(TartanView().ignoresSafeArea().opacity(0.20))
             .navigationTitle("People")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -46,7 +47,6 @@ struct PeopleView: View {
                 Button("Cancel", role: .cancel) { newPersonName = "" }
             }
         }
-        .background(TartanView().ignoresSafeArea().opacity(0.20))
     }
 
     private func addPerson() {
