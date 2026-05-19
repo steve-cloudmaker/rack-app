@@ -17,6 +17,8 @@ struct ItemDetailView: View {
     @State private var isGeneratingDescription = false
     @State private var isEstimatingPrice = false
     @State private var showingAddLocation = false
+    @State private var showingCamera = false
+    @State private var showingPhotoPicker = false
 
     @AppStorage("anthropic_api_key") private var anthropicAPIKey = ""
     private var aiEnabled: Bool { !anthropicAPIKey.isEmpty }
@@ -39,6 +41,10 @@ struct ItemDetailView: View {
                 classificationSection
                 statusSection
                 locationSection
+            }
+            .photosPicker(isPresented: $showingPhotoPicker, selection: $selectedPhotos, maxSelectionCount: 5 - photoData.count, matching: .images)
+            .sheet(isPresented: $showingCamera) {
+                CameraView { data in photoData.append(data) }
             }
             .navigationTitle(isNew ? "New Item" : "Edit Item")
             .navigationBarTitleDisplayMode(.inline)
@@ -84,12 +90,26 @@ struct ItemDetailView: View {
                         }
                     }
                     if photoData.count < 5 {
-                        PhotosPicker(selection: $selectedPhotos, maxSelectionCount: 5 - photoData.count, matching: .images) {
+                        Menu {
+                            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                                Button {
+                                    showingCamera = true
+                                } label: {
+                                    Label("Take Photo", systemImage: "camera")
+                                }
+                            }
+                            Button {
+                                showingPhotoPicker = true
+                            } label: {
+                                Label("Choose from Library", systemImage: "photo.on.rectangle")
+                            }
+                        } label: {
                             RoundedRectangle(cornerRadius: 8)
                                 .fill(Color(.systemGray5))
                                 .frame(width: 100, height: 100)
                                 .overlay(Image(systemName: "plus").font(.title2).foregroundStyle(.secondary))
                         }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding(.vertical, 8)
@@ -303,6 +323,41 @@ struct ItemDetailView: View {
         }
 
         dismiss()
+    }
+}
+
+// MARK: - Camera
+
+struct CameraView: UIViewControllerRepresentable {
+    var onCapture: (Data) -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    func makeCoordinator() -> Coordinator { Coordinator(self) }
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: CameraView
+        init(_ parent: CameraView) { self.parent = parent }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let image = info[.originalImage] as? UIImage,
+               let data = image.jpegData(compressionQuality: 0.85) {
+                parent.onCapture(data)
+            }
+            parent.dismiss()
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.dismiss()
+        }
     }
 }
 
