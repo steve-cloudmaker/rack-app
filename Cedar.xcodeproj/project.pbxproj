@@ -22,6 +22,7 @@
 		A1B9145DECBF713CCC40B6E9 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB044DBC6ED7E7D00B0DC85 /* PeopleView.swift */; };
 		A63FFB3F72F64CAA0E8CF7EF /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B4C10381548B7BC4AC0BB2 /* LocationsView.swift */; };
 		B4BB46C8D7498661A85DFA4D /* ClothingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EF961A6D51449FE475A6B /* ClothingItem.swift */; };
+		B7AF13CBF903E7B51862F6CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DB174B777DB6B07CC4D88E6 /* Assets.xcassets */; };
 		BF119AFA484D66E182780643 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B04A912F5645094699D706 /* ItemDetailView.swift */; };
 		BF8369CCAFD2BD8985A494C0 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5608F3C55242C79A28E25EE9 /* SettingsView.swift */; };
 		C2A1BBE8855EC856F726309A /* InventoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14936AC8B5B4BE549D50079 /* InventoryListView.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0DB174B777DB6B07CC4D88E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		11186F531BC73E824CF415EC /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		15C34A3DEAC255DDBB15C813 /* ItemCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCondition.swift; sourceTree = "<group>"; };
 		1C6566E75CBE11B594977E2D /* CSVImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVImporter.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 		5F00AA8DF586EE53443ECD41 /* Rack */ = {
 			isa = PBXGroup;
 			children = (
+				0DB174B777DB6B07CC4D88E6 /* Assets.xcassets */,
 				3952275E671A71BF51CEFB90 /* Cedar.entitlements */,
 				FB1F707AAB77F0FC9BD734A2 /* Info.plist */,
 				6E729103AA022F977A9486EF /* App */,
@@ -189,6 +192,7 @@
 			buildConfigurationList = 8F61CF750C0DA5B715FC3069 /* Build configuration list for PBXNativeTarget "Cedar" */;
 			buildPhases = (
 				6B0E0F93818B1770CC5C509C /* Sources */,
+				2D5AF3AE8227FCA7B87C8CC4 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -234,6 +238,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2D5AF3AE8227FCA7B87C8CC4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B7AF13CBF903E7B51862F6CF /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6B0E0F93818B1770CC5C509C /* Sources */ = {
