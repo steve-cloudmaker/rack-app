@@ -15,6 +15,7 @@ struct ItemDetailView: View {
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var photoData: [Data] = []
     @State private var isGeneratingDescription = false
+    @State private var showingAddLocation = false
 
     init(item: ClothingItem?) {
         self.existingItem = item
@@ -44,6 +45,11 @@ struct ItemDetailView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") { save() }
                         .disabled(draft.itemDescription.isEmpty && draft.brand.isEmpty)
+                }
+            }
+            .sheet(isPresented: $showingAddLocation) {
+                AddLocationView { newID in
+                    draft.locationID = newID
                 }
             }
         }
@@ -198,16 +204,18 @@ struct ItemDetailView: View {
 
     private var locationSection: some View {
         Section("Location") {
-            if locations.isEmpty {
-                Text("No locations added yet")
-                    .foregroundStyle(.secondary)
-            } else {
-                Picker("Location", selection: $draft.locationID) {
-                    Text("None").tag(Optional<UUID>.none)
-                    ForEach(locations) { location in
-                        Text(location.displayLabel).tag(Optional(location.id))
-                    }
+            Picker("Location", selection: $draft.locationID) {
+                Text("None").tag(Optional<UUID>.none)
+                ForEach(locations) { location in
+                    Text(location.displayLabel).tag(Optional(location.id))
                 }
+            }
+            .disabled(locations.isEmpty)
+
+            Button {
+                showingAddLocation = true
+            } label: {
+                Label("New Location…", systemImage: "plus")
             }
         }
     }

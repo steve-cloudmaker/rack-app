@@ -53,6 +53,8 @@ struct LocationsView: View {
 }
 
 struct AddLocationView: View {
+    var onAdd: ((UUID) -> Void)? = nil
+
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
@@ -100,6 +102,7 @@ struct AddLocationView: View {
             row: row.trimmingCharacters(in: .whitespaces)
         )
         modelContext.insert(location)
+        onAdd?(location.id)
         dismiss()
     }
 }
