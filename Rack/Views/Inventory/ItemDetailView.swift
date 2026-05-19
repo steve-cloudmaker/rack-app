@@ -15,7 +15,11 @@ struct ItemDetailView: View {
     @State private var selectedPhotos: [PhotosPickerItem] = []
     @State private var photoData: [Data] = []
     @State private var isGeneratingDescription = false
+    @State private var isEstimatingPrice = false
     @State private var showingAddLocation = false
+
+    @AppStorage("anthropic_api_key") private var anthropicAPIKey = ""
+    private var aiEnabled: Bool { !anthropicAPIKey.isEmpty }
 
     init(item: ClothingItem?) {
         self.existingItem = item
@@ -103,7 +107,7 @@ struct ItemDetailView: View {
                 TextField("Description", text: $draft.itemDescription)
                 if isGeneratingDescription {
                     ProgressView().scaleEffect(0.8)
-                } else if !photoData.isEmpty {
+                } else if aiEnabled && !photoData.isEmpty {
                     Button {
                         Task { await generateDescription() }
                     } label: {
@@ -185,9 +189,21 @@ struct ItemDetailView: View {
                 HStack {
                     Text("Listing Price")
                     Spacer()
+                    if isEstimatingPrice {
+                        ProgressView().scaleEffect(0.8)
+                    } else if aiEnabled {
+                        Button {
+                            Task { await estimatePrice() }
+                        } label: {
+                            Image(systemName: "wand.and.stars")
+                                .foregroundStyle(.purple)
+                        }
+                        .buttonStyle(.borderless)
+                    }
                     TextField("$0.00", value: $draft.listingPrice, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                         .multilineTextAlignment(.trailing)
                         .keyboardType(.decimalPad)
+                        .frame(maxWidth: 100)
                 }
                 if draft.status == .sold {
                     HStack {
@@ -235,9 +251,24 @@ struct ItemDetailView: View {
 
     private func generateDescription() async {
         isGeneratingDescription = true
-        do { isGeneratingDescription = false }
-        // AI description generation — implemented in AIService
-        // draft.itemDescription = await AIService.shared.generateDescription(photoData: photoData)
+        defer { isGeneratingDescription = false }
+        if let result = await AIService.shared.generateDescription(photoData: photoData) {
+            draft.itemDescription = result
+        }
+    }
+
+    private func estimatePrice() async {
+        isEstimatingPrice = true
+        defer { isEstimatingPrice = false }
+        if let price = await AIService.shared.estimatePrice(
+            brand: draft.brand,
+            type: draft.clothingType,
+            condition: draft.condition,
+            size: draft.size,
+            ageGroup: draft.ageGroup
+        ) {
+            draft.listingPrice = price
+        }
     }
 
     private func save() {
