@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 actor AIService {
     static let shared = AIService()
@@ -18,9 +19,15 @@ actor AIService {
     func generateDescription(photoData: [Data]) async -> String? {
         guard isConfigured, !photoData.isEmpty else { return nil }
 
-        let imageBlocks: [ContentBlock] = photoData.prefix(3).map { data in
-            .image(mediaType: mediaType(for: data), data: data.base64EncodedString())
+        let imageBlocks: [ContentBlock] = photoData.prefix(3).compactMap { data in
+            guard let (prepared, mt) = prepareImage(data) else { return nil }
+            return .image(mediaType: mt, data: prepared.base64EncodedString())
         }
+        guard !imageBlocks.isEmpty else {
+            print("[AIService] No images could be prepared for API")
+            return nil
+        }
+
         let textBlock = ContentBlock.text(
             "Describe this clothing item in one concise sentence (10–15 words) for a resale inventory. " +
             "Include the item type, primary color, and brand if clearly visible. " +
@@ -79,25 +86,54 @@ actor AIService {
         urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
 
         let encoder = JSONEncoder()
-        guard let body = try? encoder.encode(requestBody) else { return nil }
-        urlRequest.httpBody = body
+        do {
+            let body = try encoder.encode(requestBody)
+            print("[AIService] Sending request — body: \(body.count / 1024) KB")
+            urlRequest.httpBody = body
+        } catch {
+            print("[AIService] Encoding failed: \(error)")
+            return nil
+        }
 
-        guard let (data, response) = try? await URLSession.shared.data(for: urlRequest),
-              (response as? HTTPURLResponse)?.statusCode == 200 else { return nil }
-
-        guard let decoded = try? JSONDecoder().decode(MessagesResponse.self, from: data) else { return nil }
-        return decoded.content.first(where: { $0.type == "text" })?.text
+        do {
+            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+            let status = (response as? HTTPURLResponse)?.statusCode ?? -1
+            print("[AIService] Response status: \(status)")
+            guard status == 200 else {
+                print("[AIService] Error body: \(String(data: data, encoding: .utf8) ?? "<unreadable>")")
+                return nil
+            }
+            let decoded = try JSONDecoder().decode(MessagesResponse.self, from: data)
+            return decoded.content.first(where: { $0.type == "text" })?.text
+        } catch {
+            print("[AIService] Request failed: \(error)")
+            return nil
+        }
     }
 
-    // MARK: - Helpers
+    // MARK: - Image Preparation
 
-    private func mediaType(for data: Data) -> String {
-        guard data.count >= 4 else { return "image/jpeg" }
-        let bytes = [UInt8](data.prefix(4))
-        if bytes[0] == 0x89 && bytes[1] == 0x50 { return "image/png" }
-        if bytes[0] == 0xFF && bytes[1] == 0xD8 { return "image/jpeg" }
-        if bytes[0] == 0x52 && bytes[1] == 0x49 { return "image/webp" }
-        return "image/jpeg"
+    // Transcodes to JPEG and resizes to fit within maxDimension.
+    // Handles HEIC and any other format UIImage can decode.
+    private func prepareImage(_ data: Data, maxDimension: CGFloat = 1568) -> (Data, String)? {
+        guard let image = UIImage(data: data) else {
+            print("[AIService] Could not decode image data (\(data.count) bytes)")
+            return nil
+        }
+        let size = image.size
+        let longest = max(size.width, size.height)
+        let scale = longest > maxDimension ? maxDimension / longest : 1.0
+        let targetSize = CGSize(width: size.width * scale, height: size.height * scale)
+
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        let resized = renderer.image { _ in image.draw(in: CGRect(origin: .zero, size: targetSize)) }
+
+        guard let jpeg = resized.jpegData(compressionQuality: 0.8) else {
+            print("[AIService] JPEG conversion failed")
+            return nil
+        }
+        print("[AIService] Image prepared: \(Int(targetSize.width))×\(Int(targetSize.height)), \(jpeg.count / 1024) KB")
+        return (jpeg, "image/jpeg")
     }
 }
 
