@@ -13,6 +13,7 @@ struct SettingsView: View {
     @FetchRequest(fetchRequest: {
         let req = ClothingItem.fetchRequest()
         req.fetchLimit = 1
+        req.sortDescriptors = [NSSortDescriptor(keyPath: \ClothingItem.createdAt, ascending: true)]
         return req
     }()) private var firstItem: FetchedResults<ClothingItem>
 
