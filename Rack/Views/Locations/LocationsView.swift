@@ -1,9 +1,14 @@
 import SwiftUI
-import SwiftData
+import CoreData
 
 struct LocationsView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query(sort: \StorageLocation.name) private var locations: [StorageLocation]
+    @Environment(\.managedObjectContext) private var managedObjectContext
+
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \StorageLocation.name, ascending: true)],
+        animation: .default
+    ) private var locations: FetchedResults<StorageLocation>
+
     @State private var showingAddLocation = false
 
     var body: some View {
@@ -46,21 +51,20 @@ struct LocationsView: View {
     }
 
     private func deleteLocations(at offsets: IndexSet) {
-        for index in offsets {
-            modelContext.delete(locations[index])
-        }
+        for index in offsets { managedObjectContext.delete(locations[index]) }
+        try? managedObjectContext.save()
     }
 }
 
 struct AddLocationView: View {
     var onAdd: ((UUID) -> Void)? = nil
 
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.managedObjectContext) private var managedObjectContext
     @Environment(\.dismiss) private var dismiss
 
     @State private var name = ""
     @State private var rack = ""
-    @State private var row = ""
+    @State private var row  = ""
 
     var body: some View {
         NavigationStack {
@@ -70,7 +74,6 @@ struct AddLocationView: View {
                     TextField("Rack (optional)", text: $rack)
                     TextField("Row (optional)", text: $row)
                 }
-
                 Section {
                     Text("Preview: \(previewLabel)")
                         .foregroundStyle(.secondary)
@@ -91,17 +94,20 @@ struct AddLocationView: View {
     }
 
     private var previewLabel: String {
-        let location = StorageLocation(name: name, rack: rack, row: row)
-        return location.displayLabel
+        var parts = [name]
+        if !rack.isEmpty { parts.append("Rack \(rack)") }
+        if !row.isEmpty  { parts.append("Row \(row)")  }
+        return parts.joined(separator: " · ")
     }
 
     private func save() {
         let location = StorageLocation(
             name: name.trimmingCharacters(in: .whitespaces),
             rack: rack.trimmingCharacters(in: .whitespaces),
-            row: row.trimmingCharacters(in: .whitespaces)
+            row:  row.trimmingCharacters(in: .whitespaces),
+            context: managedObjectContext
         )
-        modelContext.insert(location)
+        try? managedObjectContext.save()
         onAdd?(location.id)
         dismiss()
     }

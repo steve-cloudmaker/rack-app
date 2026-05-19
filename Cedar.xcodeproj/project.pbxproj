@@ -19,6 +19,7 @@
 		8CC3802BBA6EB710CDAE327C /* StorageLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DB78D6FF68C51C97A15882 /* StorageLocation.swift */; };
 		8D0086EE0C488BDBDFCE34DF /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11186F531BC73E824CF415EC /* SplashScreenView.swift */; };
 		98BB9565A30B3D9DE818D86D /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D7A62421066013A2B5C8D95 /* Gender.swift */; };
+		9E83F1FBF697DB84D18B5A4B /* CloudSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62915E03C2C3B8F095247CE4 /* CloudSharingView.swift */; };
 		9EC39CC313BDA2067F030DA8 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E7EA0AD8818E243C53D314 /* Person.swift */; };
 		A1B9145DECBF713CCC40B6E9 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB044DBC6ED7E7D00B0DC85 /* PeopleView.swift */; };
 		A63FFB3F72F64CAA0E8CF7EF /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B4C10381548B7BC4AC0BB2 /* LocationsView.swift */; };
@@ -28,6 +29,8 @@
 		BF8369CCAFD2BD8985A494C0 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5608F3C55242C79A28E25EE9 /* SettingsView.swift */; };
 		C2A1BBE8855EC856F726309A /* InventoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14936AC8B5B4BE549D50079 /* InventoryListView.swift */; };
 		C8A2BCCB2AC472E9AFD847F7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B622DFE492799A23BB823A /* ContentView.swift */; };
+		E22B7365A8B6018FDCC3F4FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEA41DB5F4527A21CF4CB1 /* AppDelegate.swift */; };
+		E3192997859DABC70E6E4451 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0EC6A013F97E515AE40F4C8 /* PersistenceController.swift */; };
 		FB449715D4702F3D68B25FA8 /* CSVImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6566E75CBE11B594977E2D /* CSVImporter.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +44,7 @@
 		3952275E671A71BF51CEFB90 /* Cedar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cedar.entitlements; sourceTree = "<group>"; };
 		5608F3C55242C79A28E25EE9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		5CF1B51F7190B32482B63D77 /* AgeGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeGroup.swift; sourceTree = "<group>"; };
+		62915E03C2C3B8F095247CE4 /* CloudSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingView.swift; sourceTree = "<group>"; };
 		64B4C10381548B7BC4AC0BB2 /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
 		754ADC57F3EC2B31ECD79B54 /* ItemPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemPhoto.swift; sourceTree = "<group>"; };
 		920EF961A6D51449FE475A6B /* ClothingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingItem.swift; sourceTree = "<group>"; };
@@ -52,9 +56,11 @@
 		D0115B82BAD38E7794BF2699 /* ClothingSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingSize.swift; sourceTree = "<group>"; };
 		D230DFA585A31234CFBF5D66 /* ClothingType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingType.swift; sourceTree = "<group>"; };
 		D692282B73A61F53175A0273 /* ItemStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStatus.swift; sourceTree = "<group>"; };
+		D6DEA41DB5F4527A21CF4CB1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D9380E223885884A27671DE4 /* Cedar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cedar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9CE3A2B6AAF69A1878EBEF7 /* CedarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CedarApp.swift; sourceTree = "<group>"; };
 		EFB044DBC6ED7E7D00B0DC85 /* PeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
+		F0EC6A013F97E515AE40F4C8 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		F14936AC8B5B4BE549D50079 /* InventoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryListView.swift; sourceTree = "<group>"; };
 		FB1F707AAB77F0FC9BD734A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -86,6 +92,7 @@
 				6E729103AA022F977A9486EF /* App */,
 				C4CE4886EB562A626A24DE98 /* Enums */,
 				8EC16A798A427795D043F00A /* Models */,
+				C52604FDEE6CDDFB570754D0 /* Persistence */,
 				CD5BAD8ADCC6C660E649CCD8 /* Services */,
 				9DD8FC5F66719A91E9336AB3 /* Utilities */,
 				FB88993F53B19191512D85CD /* Views */,
@@ -93,9 +100,18 @@
 			path = Rack;
 			sourceTree = "<group>";
 		};
+		6AA546A36AFE80198F8626B7 /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				62915E03C2C3B8F095247CE4 /* CloudSharingView.swift */,
+			);
+			path = Sharing;
+			sourceTree = "<group>";
+		};
 		6E729103AA022F977A9486EF /* App */ = {
 			isa = PBXGroup;
 			children = (
+				D6DEA41DB5F4527A21CF4CB1 /* AppDelegate.swift */,
 				E9CE3A2B6AAF69A1878EBEF7 /* CedarApp.swift */,
 				31B622DFE492799A23BB823A /* ContentView.swift */,
 			);
@@ -167,6 +183,14 @@
 			path = Enums;
 			sourceTree = "<group>";
 		};
+		C52604FDEE6CDDFB570754D0 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				F0EC6A013F97E515AE40F4C8 /* PersistenceController.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
 		CD5BAD8ADCC6C660E649CCD8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -183,6 +207,7 @@
 				B75F5BC3800E7E8ED887092B /* Locations */,
 				BBBA241F41A103EE8D9F60C8 /* People */,
 				91BC513D5DC0DD61F052E304 /* Settings */,
+				6AA546A36AFE80198F8626B7 /* Sharing */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -215,7 +240,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2640;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					0392B7C334E5F981D6362BCF = {
 						ProvisioningStyle = Automatic;
@@ -259,11 +284,13 @@
 			files = (
 				529B861A9240DE6E6AC34397 /* AIService.swift in Sources */,
 				39F39DAE59B1DCD39C760958 /* AgeGroup.swift in Sources */,
+				E22B7365A8B6018FDCC3F4FC /* AppDelegate.swift in Sources */,
 				FB449715D4702F3D68B25FA8 /* CSVImporter.swift in Sources */,
 				2EA401C15906640158A85F6A /* CedarApp.swift in Sources */,
 				B4BB46C8D7498661A85DFA4D /* ClothingItem.swift in Sources */,
 				8345210F4108C706EB05C5D9 /* ClothingSize.swift in Sources */,
 				1F9EA8EC5D6B6753B8387E47 /* ClothingType.swift in Sources */,
+				9E83F1FBF697DB84D18B5A4B /* CloudSharingView.swift in Sources */,
 				C8A2BCCB2AC472E9AFD847F7 /* ContentView.swift in Sources */,
 				98BB9565A30B3D9DE818D86D /* Gender.swift in Sources */,
 				C2A1BBE8855EC856F726309A /* InventoryListView.swift in Sources */,
@@ -273,6 +300,7 @@
 				04836138614246D65E4976EF /* ItemStatus.swift in Sources */,
 				A63FFB3F72F64CAA0E8CF7EF /* LocationsView.swift in Sources */,
 				A1B9145DECBF713CCC40B6E9 /* PeopleView.swift in Sources */,
+				E3192997859DABC70E6E4451 /* PersistenceController.swift in Sources */,
 				9EC39CC313BDA2067F030DA8 /* Person.swift in Sources */,
 				BF8369CCAFD2BD8985A494C0 /* SettingsView.swift in Sources */,
 				1A5E7C25FC4B9E9CDA7BB8C0 /* ShoeSize.swift in Sources */,
@@ -292,6 +320,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				INFOPLIST_FILE = Rack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -314,6 +343,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				INFOPLIST_FILE = Rack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -364,10 +394,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -388,7 +416,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -430,10 +457,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -447,7 +472,6 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;

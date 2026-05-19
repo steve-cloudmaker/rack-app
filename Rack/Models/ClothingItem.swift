@@ -1,35 +1,43 @@
-import SwiftData
+import CoreData
 import Foundation
 
-@Model
-final class ClothingItem {
-    var id: UUID = UUID()
-    var createdAt: Date = Date()
-    var updatedAt: Date = Date()
+@objc(ClothingItem)
+class ClothingItem: NSManagedObject {
+    @NSManaged var id: UUID
+    @NSManaged var createdAt: Date
+    @NSManaged var updatedAt: Date
+    @NSManaged var itemDescription: String
+    @NSManaged var brand: String
+    @NSManaged var color: String
+    @NSManaged var statusRaw: String
+    @NSManaged var clothingTypeRaw: String
+    @NSManaged var ageGroupRaw: String
+    @NSManaged var genderRaw: String
+    @NSManaged var conditionRaw: String
+    @NSManaged var sizeRaw: String
+    @NSManaged var shoeSizeRaw: String
+    @NSManaged var listingPrice: NSNumber?
+    @NSManaged var salePrice: NSNumber?
+    @NSManaged var photos: NSSet?
+    @NSManaged var owner: Person?
+    @NSManaged var location: StorageLocation?
 
-    // Core attributes stored as primitives for CloudKit compatibility
-    var itemDescription: String = ""
-    var brand: String = ""
-    var color: String = ""
-
-    var statusRaw: String = ItemStatus.keep.rawValue
-    var clothingTypeRaw: String = ClothingType.shirts.rawValue
-    var ageGroupRaw: String = AgeGroup.adult.rawValue
-    var genderRaw: String = Gender.unisex.rawValue
-    var conditionRaw: String = ItemCondition.good.rawValue
-    var sizeRaw: String = ""
-    var shoeSizeRaw: String = ""
-
-    var listingPrice: Double?
-    var salePrice: Double?
-
-    @Relationship(deleteRule: .cascade, inverse: \ItemPhoto.item)
-    var photos: [ItemPhoto]?
-
-    var owner: Person?
-    var location: StorageLocation?
-
-    init() {}
+    override func awakeFromInsert() {
+        super.awakeFromInsert()
+        id         = UUID()
+        createdAt  = Date()
+        updatedAt  = Date()
+        itemDescription = ""
+        brand      = ""
+        color      = ""
+        statusRaw       = ItemStatus.keep.rawValue
+        clothingTypeRaw = ClothingType.shirts.rawValue
+        ageGroupRaw     = AgeGroup.adult.rawValue
+        genderRaw       = Gender.unisex.rawValue
+        conditionRaw    = ItemCondition.good.rawValue
+        sizeRaw         = ""
+        shoeSizeRaw     = ""
+    }
 
     // MARK: - Typed accessors
 
@@ -71,7 +79,8 @@ final class ClothingItem {
     // MARK: - Derived helpers
 
     var sortedPhotos: [ItemPhoto] {
-        (photos ?? []).sorted { $0.sortOrder < $1.sortOrder }
+        guard let set = photos as? Set<ItemPhoto> else { return [] }
+        return set.sorted { $0.sortOrder < $1.sortOrder }
     }
 
     var displayTitle: String {
@@ -81,5 +90,12 @@ final class ClothingItem {
 
     var canHaveListingPrice: Bool {
         status == .forSale || status == .listed || status == .sold
+    }
+
+}
+
+extension ClothingItem: Identifiable {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<ClothingItem> {
+        NSFetchRequest<ClothingItem>(entityName: "ClothingItem")
     }
 }

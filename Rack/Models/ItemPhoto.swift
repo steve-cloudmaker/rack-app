@@ -1,15 +1,18 @@
-import SwiftData
+import CoreData
 import Foundation
 
-@Model
-final class ItemPhoto {
-    var id: UUID = UUID()
-    var sortOrder: Int = 0
-    @Attribute(.externalStorage) var imageData: Data?
-    var item: ClothingItem?
+@objc(ItemPhoto)
+class ItemPhoto: NSManagedObject {
+    @NSManaged var id: UUID
+    @NSManaged var sortOrder: Int64
+    @NSManaged var imageData: Data?
+    @NSManaged var item: ClothingItem?
 
-    init(imageData: Data, sortOrder: Int = 0) {
-        self.imageData = imageData
-        self.sortOrder = sortOrder
+    override func awakeFromInsert() {
+        super.awakeFromInsert()
+        id        = UUID()
+        sortOrder = 0
     }
 }
+
+extension ItemPhoto: Identifiable {}

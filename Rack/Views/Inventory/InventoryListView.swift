@@ -1,9 +1,13 @@
 import SwiftUI
-import SwiftData
+import CoreData
 
 struct InventoryListView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query(sort: \ClothingItem.updatedAt, order: .reverse) private var items: [ClothingItem]
+    @Environment(\.managedObjectContext) private var managedObjectContext
+
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \ClothingItem.updatedAt, ascending: false)],
+        animation: .default
+    ) private var items: FetchedResults<ClothingItem>
 
     @State private var searchText = ""
     @State private var selectedStatus: ItemStatus?
@@ -11,10 +15,10 @@ struct InventoryListView: View {
 
     var filteredItems: [ClothingItem] {
         items.filter { item in
-            let matchesSearch = searchText.isEmpty ||
-                item.displayTitle.localizedCaseInsensitiveContains(searchText) ||
-                item.brand.localizedCaseInsensitiveContains(searchText) ||
-                item.color.localizedCaseInsensitiveContains(searchText)
+            let matchesSearch = searchText.isEmpty
+                || item.displayTitle.localizedCaseInsensitiveContains(searchText)
+                || item.brand.localizedCaseInsensitiveContains(searchText)
+                || item.color.localizedCaseInsensitiveContains(searchText)
             let matchesStatus = selectedStatus == nil || item.status == selectedStatus
             return matchesSearch && matchesStatus
         }
@@ -61,9 +65,8 @@ struct InventoryListView: View {
     }
 
     private func deleteItems(at offsets: IndexSet) {
-        for index in offsets {
-            modelContext.delete(filteredItems[index])
-        }
+        for index in offsets { managedObjectContext.delete(filteredItems[index]) }
+        try? managedObjectContext.save()
     }
 
     private var statusFilterMenu: some View {
@@ -76,7 +79,9 @@ struct InventoryListView: View {
         } label: {
             Label(
                 selectedStatus?.displayName ?? "Filter",
-                systemImage: selectedStatus == nil ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill"
+                systemImage: selectedStatus == nil
+                    ? "line.3.horizontal.decrease.circle"
+                    : "line.3.horizontal.decrease.circle.fill"
             )
         }
     }
@@ -87,7 +92,9 @@ struct ItemRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            if let photo = item.sortedPhotos.first, let data = photo.imageData, let image = UIImage(data: data) {
+            if let photo = item.sortedPhotos.first,
+               let data = photo.imageData,
+               let image = UIImage(data: data) {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
@@ -97,7 +104,10 @@ struct ItemRowView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color(.systemGray5))
                     .frame(width: 56, height: 56)
-                    .overlay(Image(systemName: item.clothingType == .shoes ? "shoe" : "tshirt").foregroundStyle(.secondary))
+                    .overlay(
+                        Image(systemName: item.clothingType == .shoes ? "shoe" : "tshirt")
+                            .foregroundStyle(.secondary)
+                    )
             }
 
             VStack(alignment: .leading, spacing: 4) {
@@ -105,14 +115,15 @@ struct ItemRowView: View {
                     .font(.body)
                     .lineLimit(1)
                 HStack(spacing: 6) {
-                    if let sizeDisplay = item.clothingType == .shoes ? item.shoeSize?.contextualDisplayName : item.size?.displayName {
+                    if let sizeDisplay = item.clothingType == .shoes
+                        ? item.shoeSize?.contextualDisplayName
+                        : item.size?.displayName {
                         Text(sizeDisplay)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                     if let owner = item.owner {
-                        Text("·")
-                            .foregroundStyle(.secondary)
+                        Text("·").foregroundStyle(.secondary)
                         Text(owner.name)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -121,7 +132,6 @@ struct ItemRowView: View {
             }
 
             Spacer()
-
             StatusBadge(status: item.status)
         }
         .padding(.vertical, 2)
@@ -133,12 +143,12 @@ struct StatusBadge: View {
 
     var color: Color {
         switch status {
-        case .keep: return .blue
-        case .forSale: return .orange
-        case .listed: return .purple
-        case .sold: return .green
+        case .keep:        return .blue
+        case .forSale:     return .orange
+        case .listed:      return .purple
+        case .sold:        return .green
         case .forDonation: return .teal
-        case .givenAway: return .gray
+        case .givenAway:   return .gray
         }
     }
 

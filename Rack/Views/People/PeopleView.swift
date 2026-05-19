@@ -1,9 +1,14 @@
 import SwiftUI
-import SwiftData
+import CoreData
 
 struct PeopleView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query(sort: \Person.name) private var people: [Person]
+    @Environment(\.managedObjectContext) private var managedObjectContext
+
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Person.name, ascending: true)],
+        animation: .default
+    ) private var people: FetchedResults<Person>
+
     @State private var showingAddPerson = false
     @State private var newPersonName = ""
 
@@ -50,14 +55,15 @@ struct PeopleView: View {
     }
 
     private func addPerson() {
-        guard !newPersonName.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-        modelContext.insert(Person(name: newPersonName.trimmingCharacters(in: .whitespaces)))
+        let trimmed = newPersonName.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return }
+        _ = Person(name: trimmed, context: managedObjectContext)
+        try? managedObjectContext.save()
         newPersonName = ""
     }
 
     private func deletePeople(at offsets: IndexSet) {
-        for index in offsets {
-            modelContext.delete(people[index])
-        }
+        for index in offsets { managedObjectContext.delete(people[index]) }
+        try? managedObjectContext.save()
     }
 }

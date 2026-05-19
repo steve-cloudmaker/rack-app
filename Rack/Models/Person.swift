@@ -1,16 +1,33 @@
-import SwiftData
+import CoreData
 import Foundation
 
-@Model
-final class Person {
-    var id: UUID = UUID()
-    var name: String = ""
-    var createdAt: Date = Date()
+@objc(Person)
+class Person: NSManagedObject {
+    @NSManaged var id: UUID
+    @NSManaged var name: String
+    @NSManaged var createdAt: Date
+    @NSManaged var items: NSSet?
 
-    @Relationship(deleteRule: .nullify, inverse: \ClothingItem.owner)
-    var items: [ClothingItem]?
+    override func awakeFromInsert() {
+        super.awakeFromInsert()
+        id        = UUID()
+        createdAt = Date()
+        name      = ""
+    }
 
-    init(name: String) {
+    convenience init(name: String, context: NSManagedObjectContext) {
+        self.init(context: context)
         self.name = name
+    }
+
+    var clothingItemsArray: [ClothingItem] {
+        (items as? Set<ClothingItem>).map(Array.init) ?? []
+    }
+
+}
+
+extension Person: Identifiable {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Person> {
+        NSFetchRequest<Person>(entityName: "Person")
     }
 }

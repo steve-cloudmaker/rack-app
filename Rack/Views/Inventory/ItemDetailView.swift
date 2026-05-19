@@ -1,15 +1,19 @@
 import SwiftUI
-import SwiftData
+import CoreData
 import PhotosUI
 
 struct ItemDetailView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.managedObjectContext) private var managedObjectContext
     @Environment(\.dismiss) private var dismiss
 
-    @Query private var people: [Person]
-    @Query private var locations: [StorageLocation]
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Person.name, ascending: true)]
+    ) private var people: FetchedResults<Person>
 
-    // Editing state — nil item means we're creating
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \StorageLocation.name, ascending: true)]
+    ) private var locations: FetchedResults<StorageLocation>
+
     private let existingItem: ClothingItem?
     @State private var draft = ItemDraft()
     @State private var selectedPhotos: [PhotosPickerItem] = []
@@ -26,7 +30,7 @@ struct ItemDetailView: View {
     init(item: ClothingItem?) {
         self.existingItem = item
         if let item {
-            _draft = State(initialValue: ItemDraft(from: item))
+            _draft     = State(initialValue: ItemDraft(from: item))
             _photoData = State(initialValue: item.sortedPhotos.compactMap { $0.imageData })
         }
     }
@@ -58,9 +62,7 @@ struct ItemDetailView: View {
                 }
             }
             .sheet(isPresented: $showingAddLocation) {
-                AddLocationView { newID in
-                    draft.locationID = newID
-                }
+                AddLocationView { newID in draft.locationID = newID }
             }
         }
     }
@@ -92,15 +94,11 @@ struct ItemDetailView: View {
                     if photoData.count < 5 {
                         Menu {
                             if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                                Button {
-                                    showingCamera = true
-                                } label: {
+                                Button { showingCamera = true } label: {
                                     Label("Take Photo", systemImage: "camera")
                                 }
                             }
-                            Button {
-                                showingPhotoPicker = true
-                            } label: {
+                            Button { showingPhotoPicker = true } label: {
                                 Label("Choose from Library", systemImage: "photo.on.rectangle")
                             }
                         } label: {
@@ -116,9 +114,7 @@ struct ItemDetailView: View {
             }
             .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
         }
-        .onChange(of: selectedPhotos) { _, newItems in
-            loadPhotos(from: newItems)
-        }
+        .onChange(of: selectedPhotos) { _, newItems in loadPhotos(from: newItems) }
     }
 
     private var coreDetailsSection: some View {
@@ -128,11 +124,8 @@ struct ItemDetailView: View {
                 if isGeneratingDescription {
                     ProgressView().scaleEffect(0.8)
                 } else if aiEnabled && !photoData.isEmpty {
-                    Button {
-                        Task { await generateDescription() }
-                    } label: {
-                        Image(systemName: "wand.and.stars")
-                            .foregroundStyle(.purple)
+                    Button { Task { await generateDescription() } } label: {
+                        Image(systemName: "wand.and.stars").foregroundStyle(.purple)
                     }
                     .buttonStyle(.borderless)
                 }
@@ -140,9 +133,7 @@ struct ItemDetailView: View {
             TextField("Brand", text: $draft.brand)
             TextField("Color", text: $draft.color)
             Picker("Condition", selection: $draft.condition) {
-                ForEach(ItemCondition.allCases) { condition in
-                    Text(condition.displayName).tag(condition)
-                }
+                ForEach(ItemCondition.allCases) { c in Text(c.displayName).tag(c) }
             }
         }
     }
@@ -150,9 +141,7 @@ struct ItemDetailView: View {
     private var classificationSection: some View {
         Section("Classification") {
             Picker("Age Group", selection: $draft.ageGroup) {
-                ForEach(AgeGroup.allCases) { group in
-                    Text(group.displayName).tag(group)
-                }
+                ForEach(AgeGroup.allCases) { g in Text(g.displayName).tag(g) }
             }
             .onChange(of: draft.ageGroup) { _, newGroup in
                 if draft.clothingType.isKidsOnly && newGroup == .adult {
@@ -167,22 +156,14 @@ struct ItemDetailView: View {
             }
 
             Picker("Gender", selection: $draft.gender) {
-                ForEach(Gender.allCases) { gender in
-                    Text(gender.displayName).tag(gender)
-                }
+                ForEach(Gender.allCases) { g in Text(g.displayName).tag(g) }
             }
 
             Picker("Type", selection: $draft.clothingType) {
-                ForEach(ClothingType.available(for: draft.ageGroup)) { type in
-                    Text(type.displayName).tag(type)
-                }
+                ForEach(ClothingType.available(for: draft.ageGroup)) { t in Text(t.displayName).tag(t) }
             }
             .onChange(of: draft.clothingType) { _, newType in
-                if newType == .shoes {
-                    draft.size = nil
-                } else {
-                    draft.shoeSize = nil
-                }
+                if newType == .shoes { draft.size = nil } else { draft.shoeSize = nil }
             }
 
             if draft.clothingType == .shoes {
@@ -190,9 +171,7 @@ struct ItemDetailView: View {
                     Text("Select a size").tag(Optional<ShoeSize>.none)
                     ForEach(ShoeSize.grouped(for: draft.ageGroup), id: \.0) { category, sizes in
                         Section(category.rawValue) {
-                            ForEach(sizes) { size in
-                                Text(size.displayName).tag(Optional(size))
-                            }
+                            ForEach(sizes) { size in Text(size.displayName).tag(Optional(size)) }
                         }
                     }
                 }
@@ -201,9 +180,7 @@ struct ItemDetailView: View {
                     Text("Select a size").tag(Optional<ClothingSize>.none)
                     ForEach(ClothingSize.grouped(for: draft.ageGroup), id: \.0) { category, sizes in
                         Section(category.rawValue) {
-                            ForEach(sizes) { size in
-                                Text(size.displayName).tag(Optional(size))
-                            }
+                            ForEach(sizes) { size in Text(size.displayName).tag(Optional(size)) }
                         }
                     }
                 }
@@ -212,9 +189,7 @@ struct ItemDetailView: View {
             if !people.isEmpty {
                 Picker("Owner", selection: $draft.ownerID) {
                     Text("None").tag(Optional<UUID>.none)
-                    ForEach(people) { person in
-                        Text(person.name).tag(Optional(person.id))
-                    }
+                    ForEach(people) { p in Text(p.name).tag(Optional(p.id)) }
                 }
             }
         }
@@ -223,9 +198,7 @@ struct ItemDetailView: View {
     private var statusSection: some View {
         Section("Status") {
             Picker("Status", selection: $draft.status) {
-                ForEach(ItemStatus.allCases) { status in
-                    Text(status.displayName).tag(status)
-                }
+                ForEach(ItemStatus.allCases) { s in Text(s.displayName).tag(s) }
             }
 
             if draft.status.isForSelling || draft.status.isForDonating {
@@ -235,11 +208,8 @@ struct ItemDetailView: View {
                     if isEstimatingPrice {
                         ProgressView().scaleEffect(0.8)
                     } else if aiEnabled {
-                        Button {
-                            Task { await estimatePrice() }
-                        } label: {
-                            Image(systemName: "wand.and.stars")
-                                .foregroundStyle(.purple)
+                        Button { Task { await estimatePrice() } } label: {
+                            Image(systemName: "wand.and.stars").foregroundStyle(.purple)
                         }
                         .buttonStyle(.borderless)
                     }
@@ -265,15 +235,11 @@ struct ItemDetailView: View {
         Section("Location") {
             Picker("Location", selection: $draft.locationID) {
                 Text("None").tag(Optional<UUID>.none)
-                ForEach(locations) { location in
-                    Text(location.displayLabel).tag(Optional(location.id))
-                }
+                ForEach(locations) { l in Text(l.displayLabel).tag(Optional(l.id)) }
             }
             .disabled(locations.isEmpty)
 
-            Button {
-                showingAddLocation = true
-            } label: {
+            Button { showingAddLocation = true } label: {
                 Label("New Location…", systemImage: "plus")
             }
         }
@@ -316,37 +282,43 @@ struct ItemDetailView: View {
     }
 
     private func save() {
-        let item = existingItem ?? ClothingItem()
-
-        // Insert new items before setting any relationships
-        if isNew { modelContext.insert(item) }
-
-        item.itemDescription = draft.itemDescription
-        item.brand = draft.brand
-        item.color = draft.color
-        item.status = draft.status
-        item.clothingType = draft.clothingType
-        item.ageGroup = draft.ageGroup
-        item.gender = draft.gender
-        item.condition = draft.condition
-        item.size = draft.size
-        item.shoeSize = draft.shoeSize
-        item.listingPrice = draft.listingPrice
-        item.salePrice = draft.salePrice
-        item.updatedAt = Date()
-
-        item.owner = people.first { $0.id == draft.ownerID }
-        item.location = locations.first { $0.id == draft.locationID }
-
-        // Delete old photos, then insert new ones into context before wiring relationship
-        item.photos?.forEach { modelContext.delete($0) }
-        item.photos = []
-        for (index, data) in photoData.enumerated() {
-            let photo = ItemPhoto(imageData: data, sortOrder: index)
-            modelContext.insert(photo)
-            item.photos?.append(photo)
+        let item: ClothingItem
+        if let existing = existingItem {
+            item = existing
+        } else {
+            item = ClothingItem(context: managedObjectContext)
         }
 
+        item.itemDescription = draft.itemDescription
+        item.brand    = draft.brand
+        item.color    = draft.color
+        item.status   = draft.status
+        item.clothingType = draft.clothingType
+        item.ageGroup = draft.ageGroup
+        item.gender   = draft.gender
+        item.condition = draft.condition
+        item.size     = draft.size
+        item.shoeSize = draft.shoeSize
+        item.listingPrice = draft.listingPrice.map { NSNumber(value: $0) }
+        item.salePrice    = draft.salePrice.map    { NSNumber(value: $0) }
+        item.updatedAt    = Date()
+
+        item.owner    = people.first    { $0.id == draft.ownerID }
+        item.location = locations.first { $0.id == draft.locationID }
+
+        // Replace all photos
+        if let existing = item.photos as? Set<ItemPhoto> {
+            existing.forEach { managedObjectContext.delete($0) }
+        }
+        item.photos = NSSet()
+        for (index, data) in photoData.enumerated() {
+            let photo = ItemPhoto(context: managedObjectContext)
+            photo.imageData  = data
+            photo.sortOrder  = Int64(index)
+            photo.item       = item
+        }
+
+        try? managedObjectContext.save()
         dismiss()
     }
 }
@@ -362,7 +334,7 @@ struct CameraView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.sourceType = .camera
-        picker.delegate = context.coordinator
+        picker.delegate   = context.coordinator
         return picker
     }
 
@@ -374,7 +346,7 @@ struct CameraView: UIViewControllerRepresentable {
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let image = info[.originalImage] as? UIImage,
-               let data = image.jpegData(compressionQuality: 0.85) {
+               let data  = image.jpegData(compressionQuality: 0.85) {
                 parent.onCapture(data)
             }
             parent.dismiss()
@@ -390,36 +362,36 @@ struct CameraView: UIViewControllerRepresentable {
 
 struct ItemDraft {
     var itemDescription: String = ""
-    var brand: String = ""
-    var color: String = ""
-    var status: ItemStatus = .keep
+    var brand: String           = ""
+    var color: String           = ""
+    var status: ItemStatus      = .keep
     var clothingType: ClothingType = .shirts
-    var ageGroup: AgeGroup = .adult
-    var gender: Gender = .unisex
+    var ageGroup: AgeGroup      = .adult
+    var gender: Gender          = .unisex
     var condition: ItemCondition = .good
-    var size: ClothingSize? = nil
-    var shoeSize: ShoeSize? = nil
-    var listingPrice: Double? = nil
-    var salePrice: Double? = nil
-    var ownerID: UUID? = nil
-    var locationID: UUID? = nil
+    var size: ClothingSize?     = nil
+    var shoeSize: ShoeSize?     = nil
+    var listingPrice: Double?   = nil
+    var salePrice: Double?      = nil
+    var ownerID: UUID?          = nil
+    var locationID: UUID?       = nil
 
     init() {}
 
     init(from item: ClothingItem) {
         itemDescription = item.itemDescription
-        brand = item.brand
-        color = item.color
-        status = item.status
-        clothingType = item.clothingType
-        ageGroup = item.ageGroup
-        gender = item.gender
-        condition = item.condition
-        size = item.size
-        shoeSize = item.shoeSize
-        listingPrice = item.listingPrice
-        salePrice = item.salePrice
-        ownerID = item.owner?.id
-        locationID = item.location?.id
+        brand           = item.brand
+        color           = item.color
+        status          = item.status
+        clothingType    = item.clothingType
+        ageGroup        = item.ageGroup
+        gender          = item.gender
+        condition       = item.condition
+        size            = item.size
+        shoeSize        = item.shoeSize
+        listingPrice    = item.listingPrice?.doubleValue
+        salePrice       = item.salePrice?.doubleValue
+        ownerID         = item.owner?.id
+        locationID      = item.location?.id
     }
 }
