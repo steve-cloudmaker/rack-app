@@ -50,7 +50,7 @@
 		D0115B82BAD38E7794BF2699 /* ClothingSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingSize.swift; sourceTree = "<group>"; };
 		D230DFA585A31234CFBF5D66 /* ClothingType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingType.swift; sourceTree = "<group>"; };
 		D692282B73A61F53175A0273 /* ItemStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStatus.swift; sourceTree = "<group>"; };
-		D9380E223885884A27671DE4 /* Cedar.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Cedar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9380E223885884A27671DE4 /* Cedar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cedar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9CE3A2B6AAF69A1878EBEF7 /* CedarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CedarApp.swift; sourceTree = "<group>"; };
 		EFB044DBC6ED7E7D00B0DC85 /* PeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
 		F14936AC8B5B4BE549D50079 /* InventoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryListView.swift; sourceTree = "<group>"; };
@@ -215,7 +215,6 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					0392B7C334E5F981D6362BCF = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -289,7 +288,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				INFOPLIST_FILE = Rack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -312,7 +311,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = J7MM7A8SK8;
 				INFOPLIST_FILE = Rack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
