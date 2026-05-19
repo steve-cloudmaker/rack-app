@@ -12,13 +12,28 @@ struct RackApp: App {
             StorageLocation.self,
             ItemPhoto.self
         ])
-        // CloudKit sync requires a paid Apple Developer account.
-        // To re-enable: change `.none` to `.private("iCloud.com.stevedaurora.rack")`
         let config = ModelConfiguration(schema: schema, cloudKitDatabase: .private("iCloud.com.stevedaurona.rack"))
         do {
             container = try ModelContainer(for: schema, configurations: [config])
         } catch {
-            fatalError("Failed to initialize ModelContainer: \(error)")
+            // The on-disk store was created before CloudKit was enabled and can't migrate.
+            // Destroy it so SwiftData can create a CloudKit-compatible store from scratch.
+            print("[RackApp] ModelContainer init failed: \(error). Resetting local store.")
+            RackApp.destroyDefaultStore()
+            do {
+                container = try ModelContainer(for: schema, configurations: [config])
+            } catch {
+                fatalError("Failed to initialize ModelContainer after store reset: \(error)")
+            }
+        }
+    }
+
+    private static func destroyDefaultStore() {
+        guard let appSupport = FileManager.default
+            .urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return }
+        let names = ["default.store", "default.store-shm", "default.store-wal"]
+        for name in names {
+            try? FileManager.default.removeItem(at: appSupport.appending(path: name))
         }
     }
 
