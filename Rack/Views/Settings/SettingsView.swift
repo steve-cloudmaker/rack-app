@@ -16,6 +16,10 @@ struct SettingsView: View {
     @State private var isImporting = false
     @State private var importSuccessCount: Int?
     @State private var importError: String?
+    @State private var isExporting = false
+    @State private var exportURL: URL?
+    @State private var showingExportShare = false
+    @State private var exportError: String?
 
     @FetchRequest(fetchRequest: {
         let req = ClothingItem.fetchRequest()
@@ -115,11 +119,22 @@ struct SettingsView: View {
                             if isImporting { ProgressView().scaleEffect(0.8) }
                         }
                     }
-                    .disabled(isImporting)
+                    .disabled(isImporting || isExporting)
+
+                    Button {
+                        exportCSV()
+                    } label: {
+                        HStack {
+                            Label("Export to CSV…", systemImage: "square.and.arrow.up")
+                            Spacer()
+                            if isExporting { ProgressView().scaleEffect(0.8) }
+                        }
+                    }
+                    .disabled(isImporting || isExporting || !hasItems)
                 } header: {
                     Text("Data")
                 } footer: {
-                    Text("Import clothing items from a CSV file. Expected columns include description, brand, color, size, type, status, owner, and location.")
+                    Text("Import or export clothing items as CSV. Export uses the same columns as import (description, brand, color, size, type, status, owner, location, prices). Photos are not included.")
                 }
 
                 Section("About") {
@@ -151,6 +166,32 @@ struct SettingsView: View {
                 Button("OK") { importError = nil }
             } message: {
                 Text(importError ?? "")
+            }
+            .alert("Export Failed", isPresented: .constant(exportError != nil)) {
+                Button("OK") { exportError = nil }
+            } message: {
+                Text(exportError ?? "")
+            }
+            .sheet(isPresented: $showingExportShare, onDismiss: cleanupExportFile) {
+                if let exportURL {
+                    NavigationStack {
+                        ShareLink(
+                            item: exportURL,
+                            preview: SharePreview("Cedar Closet Export", icon: Image(systemName: "tablecells"))
+                        ) {
+                            Label("Share CSV File", systemImage: "square.and.arrow.up")
+                        }
+                        .padding()
+                        .navigationTitle("Export")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { showingExportShare = false }
+                            }
+                        }
+                    }
+                    .presentationDetents([.medium])
+                }
             }
             .fileImporter(
                 isPresented: $showingCSVImporter,
@@ -192,5 +233,25 @@ struct SettingsView: View {
                 importError = error.localizedDescription
             }
         }
+    }
+
+    private func exportCSV() {
+        isExporting = true
+        Task { @MainActor in
+            defer { isExporting = false }
+            do {
+                exportURL = try CSVExporter.exportToTemporaryFile(context: managedObjectContext)
+                showingExportShare = true
+            } catch {
+                exportError = error.localizedDescription
+            }
+        }
+    }
+
+    private func cleanupExportFile() {
+        if let exportURL {
+            try? FileManager.default.removeItem(at: exportURL)
+        }
+        exportURL = nil
     }
 }

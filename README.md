@@ -101,7 +101,8 @@ Rack/                              # Source root (historical name; product is Ce
 ├── Services/
 │   └── AIService.swift            # Claude API integration
 ├── Utilities/
-│   └── CSVImporter.swift          # CSV import logic + Settings UI entry point
+│   ├── CSVImporter.swift          # CSV import logic
+│   └── CSVExporter.swift          # CSV export logic
 ├── Assets.xcassets/               # App icon (MacKinnon tartan + C)
 ├── Cedar.entitlements
 └── Info.plist
@@ -112,8 +113,9 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed architecture map.
 ## Roadmap
 
 - [x] CSV import UI (Settings → Import from CSV)
+- [x] CSV export (Settings → Export to CSV)
 - [ ] Donation fair market value AI estimation (price wand currently targets Poshmark resale only)
-- [ ] Export inventory to CSV/JSON
+- [ ] Export inventory to JSON
 
 ## License
 

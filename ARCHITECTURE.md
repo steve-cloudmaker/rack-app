@@ -246,7 +246,10 @@ API key is read from `UserDefaults` (`anthropic_api_key`). When empty, wand butt
 
 Parses CSV files and creates `ClothingItem` records in a given `NSManagedObjectContext`. Supports columns for description, brand, color, size, shoeSize, type, ageGroup, gender, condition, status, owner, rack, row, location, listingPrice, and salePrice.
 
-**Wired to UI** via Settings → Import from CSV. Uses `.fileImporter` to pick a file, then calls `CSVImporter.import(from:context:)`.
+**Wired to UI** via Settings → Data:
+
+- **Import** — `.fileImporter` → `CSVImporter.import(from:context:)`
+- **Export** — `CSVExporter.exportToTemporaryFile(context:)` → share sheet (`ShareLink`)
 
 ## Key Data Flows
 

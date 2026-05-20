@@ -32,6 +32,7 @@
 		C8A2BCCB2AC472E9AFD847F7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B622DFE492799A23BB823A /* ContentView.swift */; };
 		E22B7365A8B6018FDCC3F4FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEA41DB5F4527A21CF4CB1 /* AppDelegate.swift */; };
 		E3192997859DABC70E6E4451 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0EC6A013F97E515AE40F4C8 /* PersistenceController.swift */; };
+		F8A3E5107F37DEB54542B3F7 /* CSVExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F7A1D7C97AC87EFE19F3C9 /* CSVExporter.swift */; };
 		FB449715D4702F3D68B25FA8 /* CSVImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6566E75CBE11B594977E2D /* CSVImporter.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		15C34A3DEAC255DDBB15C813 /* ItemCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCondition.swift; sourceTree = "<group>"; };
 		1C6566E75CBE11B594977E2D /* CSVImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVImporter.swift; sourceTree = "<group>"; };
 		1ECE38D4BBC90EC23097C230 /* ShoeSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoeSize.swift; sourceTree = "<group>"; };
+		22F7A1D7C97AC87EFE19F3C9 /* CSVExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExporter.swift; sourceTree = "<group>"; };
 		31B622DFE492799A23BB823A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3952275E671A71BF51CEFB90 /* Cedar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cedar.entitlements; sourceTree = "<group>"; };
 		5608F3C55242C79A28E25EE9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 		9DD8FC5F66719A91E9336AB3 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				22F7A1D7C97AC87EFE19F3C9 /* CSVExporter.swift */,
 				1C6566E75CBE11B594977E2D /* CSVImporter.swift */,
 			);
 			path = Utilities;
@@ -288,6 +291,7 @@
 				529B861A9240DE6E6AC34397 /* AIService.swift in Sources */,
 				39F39DAE59B1DCD39C760958 /* AgeGroup.swift in Sources */,
 				E22B7365A8B6018FDCC3F4FC /* AppDelegate.swift in Sources */,
+				F8A3E5107F37DEB54542B3F7 /* CSVExporter.swift in Sources */,
 				FB449715D4702F3D68B25FA8 /* CSVImporter.swift in Sources */,
 				2EA401C15906640158A85F6A /* CedarApp.swift in Sources */,
 				B4BB46C8D7498661A85DFA4D /* ClothingItem.swift in Sources */,
