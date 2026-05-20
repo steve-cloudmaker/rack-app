@@ -55,8 +55,18 @@ CloudKit is enabled by default via `iCloud.com.stevedaurora.cedar`. You'll need:
 
 The app uses two Core Data store configurations:
 
-- **Private** — your personal closet data
+- **Default** — your personal closet data (same CloudKit zone SwiftData used)
 - **Shared** — data received from CloudKit share invitations
+
+### Troubleshooting sync on a new device
+
+1. Sign in to the **same Apple ID** on both devices (Settings → Apple ID → iCloud).
+2. Ensure **iCloud Drive** is enabled and the device has network access.
+3. Open Cedar on your **primary device** first so any local-only data can export to iCloud.
+4. On the new device, open Cedar and wait on the Inventory tab for 1–2 minutes (first import can be slow, especially with photos).
+5. Check **Settings → iCloud Sync** for account status and recent import/export activity.
+
+If data still does not appear, your closet may only exist on the primary device’s local database and never reached iCloud (for example, after a pre-CloudKit store reset). Use **Settings → Import from CSV** as a fallback.
 
 ### AI Features
 
@@ -91,7 +101,7 @@ Rack/                              # Source root (historical name; product is Ce
 ├── Services/
 │   └── AIService.swift            # Claude API integration
 ├── Utilities/
-│   └── CSVImporter.swift          # CSV import logic (no UI yet)
+│   └── CSVImporter.swift          # CSV import logic + Settings UI entry point
 ├── Assets.xcassets/               # App icon (MacKinnon tartan + C)
 ├── Cedar.entitlements
 └── Info.plist
@@ -101,7 +111,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed architecture map.
 
 ## Roadmap
 
-- [ ] CSV import UI (import utility exists; needs a file picker and settings entry point)
+- [x] CSV import UI (Settings → Import from CSV)
 - [ ] Donation fair market value AI estimation (price wand currently targets Poshmark resale only)
 - [ ] Export inventory to CSV/JSON
 

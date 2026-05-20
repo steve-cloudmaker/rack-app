@@ -21,6 +21,7 @@
 		98BB9565A30B3D9DE818D86D /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D7A62421066013A2B5C8D95 /* Gender.swift */; };
 		9E83F1FBF697DB84D18B5A4B /* CloudSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62915E03C2C3B8F095247CE4 /* CloudSharingView.swift */; };
 		9EC39CC313BDA2067F030DA8 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E7EA0AD8818E243C53D314 /* Person.swift */; };
+		9F41F1B3D69C7BEF1C7932AA /* CloudKitSyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE7AD0459BDBC8E30883F11 /* CloudKitSyncMonitor.swift */; };
 		A1B9145DECBF713CCC40B6E9 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB044DBC6ED7E7D00B0DC85 /* PeopleView.swift */; };
 		A63FFB3F72F64CAA0E8CF7EF /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B4C10381548B7BC4AC0BB2 /* LocationsView.swift */; };
 		B4BB46C8D7498661A85DFA4D /* ClothingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EF961A6D51449FE475A6B /* ClothingItem.swift */; };
@@ -47,6 +48,7 @@
 		62915E03C2C3B8F095247CE4 /* CloudSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingView.swift; sourceTree = "<group>"; };
 		64B4C10381548B7BC4AC0BB2 /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
 		754ADC57F3EC2B31ECD79B54 /* ItemPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemPhoto.swift; sourceTree = "<group>"; };
+		7FE7AD0459BDBC8E30883F11 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitor.swift; sourceTree = "<group>"; };
 		920EF961A6D51449FE475A6B /* ClothingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingItem.swift; sourceTree = "<group>"; };
 		98E7EA0AD8818E243C53D314 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		9D7A62421066013A2B5C8D95 /* Gender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gender.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 		C52604FDEE6CDDFB570754D0 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				7FE7AD0459BDBC8E30883F11 /* CloudKitSyncMonitor.swift */,
 				F0EC6A013F97E515AE40F4C8 /* PersistenceController.swift */,
 			);
 			path = Persistence;
@@ -290,6 +293,7 @@
 				B4BB46C8D7498661A85DFA4D /* ClothingItem.swift in Sources */,
 				8345210F4108C706EB05C5D9 /* ClothingSize.swift in Sources */,
 				1F9EA8EC5D6B6753B8387E47 /* ClothingType.swift in Sources */,
+				9F41F1B3D69C7BEF1C7932AA /* CloudKitSyncMonitor.swift in Sources */,
 				9E83F1FBF697DB84D18B5A4B /* CloudSharingView.swift in Sources */,
 				C8A2BCCB2AC472E9AFD847F7 /* ContentView.swift in Sources */,
 				98BB9565A30B3D9DE818D86D /* Gender.swift in Sources */,

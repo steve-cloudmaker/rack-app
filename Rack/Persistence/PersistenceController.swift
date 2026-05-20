@@ -4,6 +4,10 @@ import CloudKit
 final class PersistenceController: @unchecked Sendable {
     static let shared = PersistenceController()
 
+    /// Must match SwiftData's default CloudKit store configuration so existing iCloud data syncs.
+    private static let privateConfigurationName = "Default"
+    private static let sharedConfigurationName = "Shared"
+
     let container: NSPersistentCloudKitContainer
 
     var viewContext: NSManagedObjectContext {
@@ -31,7 +35,7 @@ final class PersistenceController: @unchecked Sendable {
         sharedStoreURL  = appSupport.appendingPathComponent("Cedar-shared.sqlite")
 
         let privateDesc = NSPersistentStoreDescription(url: privateStoreURL)
-        privateDesc.configuration = "Private"
+        privateDesc.configuration = Self.privateConfigurationName
         privateDesc.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
             containerIdentifier: "iCloud.com.stevedaurora.cedar"
         )
@@ -39,7 +43,7 @@ final class PersistenceController: @unchecked Sendable {
         privateDesc.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 
         let sharedDesc = NSPersistentStoreDescription(url: sharedStoreURL)
-        sharedDesc.configuration = "Shared"
+        sharedDesc.configuration = Self.sharedConfigurationName
         let sharedCKOptions = NSPersistentCloudKitContainerOptions(
             containerIdentifier: "iCloud.com.stevedaurora.cedar"
         )
@@ -57,6 +61,33 @@ final class PersistenceController: @unchecked Sendable {
 
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+    }
+
+    // MARK: - CloudKit sync
+
+    func setupCloudKitSync() {
+        NotificationCenter.default.addObserver(
+            forName: NSPersistentCloudKitContainer.eventChangedNotification,
+            object: container,
+            queue: .main
+        ) { notification in
+            guard let event = notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey]
+                as? NSPersistentCloudKitContainer.Event else { return }
+            Task { @MainActor in
+                CloudKitSyncMonitor.shared.handleCloudKitEvent(event)
+            }
+        }
+
+        NotificationCenter.default.addObserver(
+            forName: .NSPersistentStoreRemoteChange,
+            object: container.persistentStoreCoordinator,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self else { return }
+            self.container.viewContext.perform {
+                self.container.viewContext.refreshAllObjects()
+            }
+        }
     }
 
     // MARK: - Model
@@ -189,8 +220,8 @@ final class PersistenceController: @unchecked Sendable {
 
         let all = [clothingItem, person, storageLocation, itemPhoto]
         model.entities = all
-        model.setEntities(all, forConfigurationName: "Private")
-        model.setEntities(all, forConfigurationName: "Shared")
+        model.setEntities(all, forConfigurationName: Self.privateConfigurationName)
+        model.setEntities(all, forConfigurationName: Self.sharedConfigurationName)
 
         return model
     }

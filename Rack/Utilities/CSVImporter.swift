@@ -19,6 +19,9 @@ struct CSVImporter {
             throw CSVImportError(message: "CSV must include at least a 'description' or 'brand' column")
         }
 
+        var peopleByName = try fetchPeople(context: context)
+        var locationsByName = try fetchLocations(context: context)
+
         var importedCount = 0
         for row in rows.dropFirst() {
             let values = parseCSVRow(row)
@@ -40,10 +43,58 @@ struct CSVImporter {
             if let priceStr = fields["listingprice"], let price = Double(priceStr) { item.listingPrice = NSNumber(value: price) }
             if let priceStr = fields["saleprice"],    let price = Double(priceStr) { item.salePrice    = NSNumber(value: price) }
 
+            if let ownerName = fields["owner"]?.trimmingCharacters(in: .whitespacesAndNewlines), !ownerName.isEmpty {
+                item.owner = person(named: ownerName, cache: &peopleByName, context: context)
+            }
+
+            if let locationName = fields["location"]?.trimmingCharacters(in: .whitespacesAndNewlines), !locationName.isEmpty {
+                item.location = location(
+                    named: locationName,
+                    rack: fields["rack"] ?? "",
+                    row: fields["row"] ?? "",
+                    cache: &locationsByName,
+                    context: context
+                )
+            }
+
             importedCount += 1
         }
         try context.save()
         return importedCount
+    }
+
+    private static func fetchPeople(context: NSManagedObjectContext) throws -> [String: Person] {
+        let request = Person.fetchRequest()
+        let people = try context.fetch(request)
+        return Dictionary(uniqueKeysWithValues: people.map { ($0.name.lowercased(), $0) })
+    }
+
+    private static func fetchLocations(context: NSManagedObjectContext) throws -> [String: StorageLocation] {
+        let request = StorageLocation.fetchRequest()
+        let locations = try context.fetch(request)
+        return Dictionary(uniqueKeysWithValues: locations.map { ($0.name.lowercased(), $0) })
+    }
+
+    private static func person(named name: String, cache: inout [String: Person], context: NSManagedObjectContext) -> Person {
+        let key = name.lowercased()
+        if let existing = cache[key] { return existing }
+        let person = Person(name: name, context: context)
+        cache[key] = person
+        return person
+    }
+
+    private static func location(
+        named name: String,
+        rack: String,
+        row: String,
+        cache: inout [String: StorageLocation],
+        context: NSManagedObjectContext
+    ) -> StorageLocation {
+        let key = name.lowercased()
+        if let existing = cache[key] { return existing }
+        let location = StorageLocation(name: name, rack: rack, row: row, context: context)
+        cache[key] = location
+        return location
     }
 
     private static func parseCSVRow(_ row: String) -> [String] {

@@ -119,7 +119,7 @@ Raw string fields on `ClothingItem` are exposed through typed computed propertie
 
 | Configuration | SQLite file | CloudKit scope | Purpose |
 |---------------|-------------|----------------|---------|
-| `Private` | `Cedar-private.sqlite` | `.private` (default) | Owner's closet data |
+| `Default` | `Cedar-private.sqlite` | `.private` (default) | Owner's closet data — **must use `Default`** to match SwiftData's CloudKit zone |
 | `Shared` | `Cedar-shared.sqlite` | `.shared` | Data from accepted share invitations |
 
 Both stores use container `iCloud.com.stevedaurora.cedar` with persistent history tracking and remote change notifications enabled. The view context merges automatically with `NSMergeByPropertyObjectTrumpMergePolicy`.
@@ -246,7 +246,7 @@ API key is read from `UserDefaults` (`anthropic_api_key`). When empty, wand butt
 
 Parses CSV files and creates `ClothingItem` records in a given `NSManagedObjectContext`. Supports columns for description, brand, color, size, shoeSize, type, ageGroup, gender, condition, status, owner, rack, row, location, listingPrice, and salePrice.
 
-**Not yet wired to UI** — no file picker or settings entry point exists.
+**Wired to UI** via Settings → Import from CSV. Uses `.fileImporter` to pick a file, then calls `CSVImporter.import(from:context:)`.
 
 ## Key Data Flows
 
