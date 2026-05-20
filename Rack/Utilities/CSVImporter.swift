@@ -7,7 +7,7 @@ struct CSVImportError: Error, LocalizedError {
 }
 
 struct CSVImporter {
-    static let expectedHeaders = ["description", "brand", "color", "size", "shoeSize", "type", "ageGroup", "gender", "condition", "status", "owner", "rack", "row", "location", "listingPrice", "salePrice"]
+    static let expectedHeaders = ["description", "brand", "color", "size", "shoeSize", "type", "ageGroup", "gender", "condition", "status", "owner", "rack", "row", "location", "listingPrice", "donationValue", "salePrice"]
 
     static func `import`(from url: URL, context: NSManagedObjectContext) throws -> Int {
         let contents = try String(contentsOf: url, encoding: .utf8)
@@ -41,6 +41,7 @@ struct CSVImporter {
             if let condStr = fields["condition"],let cond  = ItemCondition(rawValue: condStr)         { item.condition = cond }
             if let statStr = fields["status"],   let stat  = ItemStatus(rawValue: statStr)            { item.status   = stat  }
             if let priceStr = fields["listingprice"], let price = Double(priceStr) { item.listingPrice = NSNumber(value: price) }
+            if let priceStr = fields["donationvalue"], let price = Double(priceStr) { item.donationValue = NSNumber(value: price) }
             if let priceStr = fields["saleprice"],    let price = Double(priceStr) { item.salePrice    = NSNumber(value: price) }
 
             if let ownerName = fields["owner"]?.trimmingCharacters(in: .whitespacesAndNewlines), !ownerName.isEmpty {

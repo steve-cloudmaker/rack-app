@@ -78,6 +78,41 @@ actor AIService {
         return Double(text.trimmingCharacters(in: .whitespacesAndNewlines))
     }
 
+    func estimateDonationValue(
+        brand: String,
+        type: ClothingType,
+        condition: ItemCondition,
+        size: ClothingSize?,
+        shoeSize: ShoeSize?,
+        ageGroup: AgeGroup
+    ) async -> Double? {
+        guard isConfigured else { return nil }
+
+        let sizeDisplay = type == .shoes ? (shoeSize?.contextualDisplayName ?? "Unknown") : (size?.displayName ?? "Unknown")
+        let details = [
+            "Type: \(type.displayName)",
+            "Brand: \(brand.isEmpty ? "Unknown" : brand)",
+            "Condition: \(condition.displayName)",
+            "Size: \(sizeDisplay)",
+            "Age group: \(ageGroup.displayName)"
+        ].joined(separator: "\n")
+
+        let prompt =
+            "Estimate the fair market value in USD for donating this clothing item to charity (tax deduction purposes):\n\(details)\n\n" +
+            "Use typical thrift-store / Goodwill resale value, not Poshmark or retail price. " +
+            "Respond with only the dollar amount as a whole number. Example: 8"
+
+        let request = MessagesRequest(
+            model: model,
+            maxTokens: 10,
+            system: "You are an expert at estimating fair market value of donated clothing for IRS tax deduction purposes.",
+            messages: [Message(role: "user", content: [.text(prompt)])]
+        )
+
+        guard let text = await send(request) else { return nil }
+        return Double(text.trimmingCharacters(in: .whitespacesAndNewlines))
+    }
+
     // MARK: - Networking
 
     private func send(_ requestBody: MessagesRequest) async -> String? {

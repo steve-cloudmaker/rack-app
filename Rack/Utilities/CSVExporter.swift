@@ -59,6 +59,7 @@ struct CSVExporter {
             escape(location?.row ?? ""),
             escape(location?.name ?? ""),
             escape(priceString(item.listingPrice)),
+            escape(priceString(item.donationValue)),
             escape(priceString(item.salePrice)),
         ]
     }

@@ -71,6 +71,7 @@ erDiagram
         string sizeRaw
         string shoeSizeRaw
         double listingPrice
+        double donationValue
         double salePrice
     }
 
@@ -109,7 +110,7 @@ Raw string fields on `ClothingItem` are exposed through typed computed propertie
 | `Gender` | Unisex / male / female |
 | `ItemCondition` | Item condition rating |
 
-**Price fields:** `listingPrice` serves double duty — "Listing Price" for sale workflow items and "Donation Value" for donation workflow items. `salePrice` is shown only when status is Sold.
+**Price fields:** `listingPrice` for the sale workflow (For Sale / Listed / Sold), `donationValue` for the donation workflow (For Donation / Given Away), and `salePrice` when status is Sold. The two values are independent and are not copied when status changes.
 
 ## Persistence & Sync
 
@@ -237,6 +238,7 @@ Actor singleton that calls the Anthropic Messages API.
 |--------|-------|--------|
 | `generateDescription(photoData:)` | Up to 3 JPEG-transcoded images | One-sentence resale description |
 | `estimatePrice(...)` | Brand, type, condition, size, age group | Suggested Poshmark listing price (USD) |
+| `estimateDonationValue(...)` | Brand, type, condition, size, age group | Suggested fair market donation value (USD) |
 
 API key is read from `UserDefaults` (`anthropic_api_key`). When empty, wand buttons in `ItemDetailView` are hidden. Images are resized to fit within 1568px before upload.
 
@@ -244,7 +246,7 @@ API key is read from `UserDefaults` (`anthropic_api_key`). When empty, wand butt
 
 ### CSVImporter (`Utilities/CSVImporter.swift`)
 
-Parses CSV files and creates `ClothingItem` records in a given `NSManagedObjectContext`. Supports columns for description, brand, color, size, shoeSize, type, ageGroup, gender, condition, status, owner, rack, row, location, listingPrice, and salePrice.
+Parses CSV files and creates `ClothingItem` records in a given `NSManagedObjectContext`. Supports columns for description, brand, color, size, shoeSize, type, ageGroup, gender, condition, status, owner, rack, row, location, listingPrice, donationValue, and salePrice.
 
 **Wired to UI** via Settings → Data:
 

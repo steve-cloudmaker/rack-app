@@ -130,6 +130,7 @@ final class PersistenceController: @unchecked Sendable {
             attr("sizeRaw",        .stringAttributeType,  default: ""),
             attr("shoeSizeRaw",    .stringAttributeType,  default: ""),
             attr("listingPrice",   .doubleAttributeType,  optional: true),
+            attr("donationValue",  .doubleAttributeType,  optional: true),
             attr("salePrice",      .doubleAttributeType,  optional: true),
         ]
 

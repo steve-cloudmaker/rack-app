@@ -17,6 +17,7 @@ class ClothingItem: NSManagedObject {
     @NSManaged var sizeRaw: String
     @NSManaged var shoeSizeRaw: String
     @NSManaged var listingPrice: NSNumber?
+    @NSManaged var donationValue: NSNumber?
     @NSManaged var salePrice: NSNumber?
     @NSManaged var photos: NSSet?
     @NSManaged var owner: Person?
@@ -90,6 +91,10 @@ class ClothingItem: NSManagedObject {
 
     var canHaveListingPrice: Bool {
         status == .forSale || status == .listed || status == .sold
+    }
+
+    var canHaveDonationValue: Bool {
+        status == .forDonation || status == .givenAway
     }
 
 }

@@ -58,7 +58,8 @@ struct SettingsView: View {
 
                 Section("AI Features") {
                     LabeledContent("Description Generation", value: anthropicAPIKey.isEmpty ? "Disabled" : "Enabled")
-                    LabeledContent("Price Estimation",       value: anthropicAPIKey.isEmpty ? "Disabled" : "Enabled")
+                    LabeledContent("Listing Price Estimation", value: anthropicAPIKey.isEmpty ? "Disabled" : "Enabled")
+                    LabeledContent("Donation Value Estimation", value: anthropicAPIKey.isEmpty ? "Disabled" : "Enabled")
                 }
 
                 Section {

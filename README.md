@@ -9,7 +9,7 @@ Cedar gives you a complete view of everything in your wardrobe — including kid
 - **Full inventory management** — add clothing items with photos (up to 5), brand, size, shoe size, color, condition, and category
 - **Camera & photo library** — take new photos or pick from your library directly in the item form
 - **Two-path status workflow** — Keep → For Sale → Listed → Sold, or Keep → For Donation → Given Away
-- **Donation value tracking** — record fair market value on donated items (stored as `listingPrice`) for tax deduction purposes
+- **Donation value tracking** — record fair market value on donated items (`donationValue`, separate from listing price) for tax deduction purposes
 - **Smart size picker** — baby (months), toddler (T-sizes), kids numeric, letter sizes, and shoe sizes, filtered by age group
 - **People & locations** — assign items to family members and track physical storage locations (rack/row)
 - **Poshmark tracking** — record listing price and sale price per item
@@ -73,7 +73,7 @@ If data still does not appear, your closet may only exist on the primary device�
 Add your [Anthropic API key](https://console.anthropic.com/) in the app under **Settings → Anthropic API Key**. The wand buttons in the item form are hidden when no key is configured.
 
 - **Description wand** — appears next to the Description field when photos are attached
-- **Price wand** — appears next to Listing Price / Donation Value for sale and donation items
+- **Price wand** — listing price (Poshmark) for sale items; donation value (fair market) for donation items
 
 ## Project Structure
 
@@ -114,7 +114,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed architecture map.
 
 - [x] CSV import UI (Settings → Import from CSV)
 - [x] CSV export (Settings → Export to CSV)
-- [ ] Donation fair market value AI estimation (price wand currently targets Poshmark resale only)
+- [x] Separate donation value from listing price (with fair-market AI estimation)
 - [ ] Export inventory to JSON
 
 ## License

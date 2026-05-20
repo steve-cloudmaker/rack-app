@@ -201,23 +201,8 @@ struct ItemDetailView: View {
                 ForEach(ItemStatus.allCases) { s in Text(s.displayName).tag(s) }
             }
 
-            if draft.status.isForSelling || draft.status.isForDonating {
-                HStack {
-                    Text(draft.status.isForDonating ? "Donation Value" : "Listing Price")
-                    Spacer()
-                    if isEstimatingPrice {
-                        ProgressView().scaleEffect(0.8)
-                    } else if aiEnabled {
-                        Button { Task { await estimatePrice() } } label: {
-                            Image(systemName: "wand.and.stars").foregroundStyle(.purple)
-                        }
-                        .buttonStyle(.borderless)
-                    }
-                    TextField("$0.00", value: $draft.listingPrice, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                        .multilineTextAlignment(.trailing)
-                        .keyboardType(.decimalPad)
-                        .frame(maxWidth: 100)
-                }
+            if draft.status.isForSelling {
+                priceRow(label: "Listing Price", value: $draft.listingPrice)
                 if draft.status == .sold {
                     HStack {
                         Text("Sale Price")
@@ -228,6 +213,29 @@ struct ItemDetailView: View {
                     }
                 }
             }
+
+            if draft.status.isForDonating {
+                priceRow(label: "Donation Value", value: $draft.donationValue)
+            }
+        }
+    }
+
+    private func priceRow(label: String, value: Binding<Double?>) -> some View {
+        HStack {
+            Text(label)
+            Spacer()
+            if isEstimatingPrice {
+                ProgressView().scaleEffect(0.8)
+            } else if aiEnabled {
+                Button { Task { await estimatePrice() } } label: {
+                    Image(systemName: "wand.and.stars").foregroundStyle(.purple)
+                }
+                .buttonStyle(.borderless)
+            }
+            TextField("$0.00", value: value, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                .multilineTextAlignment(.trailing)
+                .keyboardType(.decimalPad)
+                .frame(maxWidth: 100)
         }
     }
 
@@ -269,15 +277,36 @@ struct ItemDetailView: View {
     private func estimatePrice() async {
         isEstimatingPrice = true
         defer { isEstimatingPrice = false }
-        if let price = await AIService.shared.estimatePrice(
-            brand: draft.brand,
-            type: draft.clothingType,
-            condition: draft.condition,
-            size: draft.size,
-            shoeSize: draft.shoeSize,
-            ageGroup: draft.ageGroup
-        ) {
-            draft.listingPrice = price
+
+        let brand = draft.brand
+        let type = draft.clothingType
+        let condition = draft.condition
+        let size = draft.size
+        let shoeSize = draft.shoeSize
+        let ageGroup = draft.ageGroup
+
+        if draft.status.isForDonating {
+            if let price = await AIService.shared.estimateDonationValue(
+                brand: brand,
+                type: type,
+                condition: condition,
+                size: size,
+                shoeSize: shoeSize,
+                ageGroup: ageGroup
+            ) {
+                draft.donationValue = price
+            }
+        } else if draft.status.isForSelling {
+            if let price = await AIService.shared.estimatePrice(
+                brand: brand,
+                type: type,
+                condition: condition,
+                size: size,
+                shoeSize: shoeSize,
+                ageGroup: ageGroup
+            ) {
+                draft.listingPrice = price
+            }
         }
     }
 
@@ -299,8 +328,9 @@ struct ItemDetailView: View {
         item.condition = draft.condition
         item.size     = draft.size
         item.shoeSize = draft.shoeSize
-        item.listingPrice = draft.listingPrice.map { NSNumber(value: $0) }
-        item.salePrice    = draft.salePrice.map    { NSNumber(value: $0) }
+        item.listingPrice  = draft.listingPrice.map  { NSNumber(value: $0) }
+        item.donationValue = draft.donationValue.map { NSNumber(value: $0) }
+        item.salePrice     = draft.salePrice.map     { NSNumber(value: $0) }
         item.updatedAt    = Date()
 
         item.owner    = people.first    { $0.id == draft.ownerID }
@@ -372,6 +402,7 @@ struct ItemDraft {
     var size: ClothingSize?     = nil
     var shoeSize: ShoeSize?     = nil
     var listingPrice: Double?   = nil
+    var donationValue: Double?  = nil
     var salePrice: Double?      = nil
     var ownerID: UUID?          = nil
     var locationID: UUID?       = nil
@@ -390,8 +421,14 @@ struct ItemDraft {
         size            = item.size
         shoeSize        = item.shoeSize
         listingPrice    = item.listingPrice?.doubleValue
+        donationValue   = item.donationValue?.doubleValue
         salePrice       = item.salePrice?.doubleValue
         ownerID         = item.owner?.id
         locationID      = item.location?.id
+
+        // Legacy items stored donation amount in listingPrice before donationValue existed.
+        if item.status.isForDonating, donationValue == nil, let legacy = item.listingPrice?.doubleValue {
+            donationValue = legacy
+        }
     }
 }
