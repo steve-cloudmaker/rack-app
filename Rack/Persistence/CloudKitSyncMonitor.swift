@@ -33,7 +33,7 @@ final class CloudKitSyncMonitor {
         // endDate is Date.distantPast while an import/export is in progress
         isSyncing = event.endDate == Date.distantPast
 
-        let store = event.storeIdentifier ?? "store"
+        let store = event.storeIdentifier.isEmpty ? "store" : event.storeIdentifier
         let type: String = switch event.type {
         case .import: "Import"
         case .export: "Export"
