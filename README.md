@@ -45,6 +45,10 @@ Cedar gives you a complete view of everything in your wardrobe — including kid
 4. Set your Development Team in **Signing & Capabilities**
 5. Build and run (`Cmd+R`)
 
+### TestFlight / App Store export compliance
+
+`Rack/Info.plist` sets `ITSAppUsesNonExemptEncryption` to `false`. Cedar only uses exempt encryption (HTTPS for the Anthropic API, standard CloudKit/iOS APIs). This avoids answering the export compliance questionnaire on every upload.
+
 ### iCloud Sync
 
 CloudKit is enabled by default via `iCloud.com.stevedaurora.cedar`. You'll need:
