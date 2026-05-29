@@ -278,7 +278,7 @@ struct FilterSheetView: View {
 // MARK: - Row & badge (unchanged)
 
 struct ItemRowView: View {
-    let item: ClothingItem
+    @ObservedObject var item: ClothingItem
 
     var body: some View {
         HStack(spacing: 12) {

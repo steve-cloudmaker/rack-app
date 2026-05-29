@@ -348,7 +348,12 @@ struct ItemDetailView: View {
             photo.item       = item
         }
 
-        try? managedObjectContext.save()
+        do {
+            try managedObjectContext.save()
+            managedObjectContext.processPendingChanges()
+        } catch {
+            print("[Cedar] Save failed: \(error)")
+        }
         dismiss()
     }
 }
