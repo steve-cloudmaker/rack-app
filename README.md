@@ -49,6 +49,14 @@ Cedar gives you a complete view of everything in your wardrobe — including kid
 
 `Rack/Info.plist` sets `ITSAppUsesNonExemptEncryption` to `false`. Cedar only uses exempt encryption (HTTPS for the Anthropic API, standard CloudKit/iOS APIs). This avoids answering the export compliance questionnaire on every upload.
 
+To build an App Store IPA for TestFlight upload:
+
+```bash
+./scripts/archive-for-testflight.sh
+```
+
+The IPA is written to `build/export/Cedar.ipa` (upload via Transporter or Xcode Organizer).
+
 ### iCloud Sync
 
 CloudKit is enabled by default via `iCloud.com.stevedaurora.cedar`. You'll need:

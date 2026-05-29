@@ -42,6 +42,7 @@ fastlane/test_output
 # Instruments
 *.trace
 .claude/
+.cursor/
 
 # Stale generated projects (xcodegen target is Cedar.xcodeproj)
 Rack.xcodeproj/
