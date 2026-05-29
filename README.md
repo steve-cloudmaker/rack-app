@@ -45,6 +45,15 @@ Cedar gives you a complete view of everything in your wardrobe — including kid
 4. Set your Development Team in **Signing & Capabilities**
 5. Build and run (`Cmd+R`)
 
+### Mac Catalyst (App Store / TestFlight)
+
+The app supports Mac Catalyst (`SUPPORTS_MACCATALYST: YES`). Mac uploads require:
+
+- `LSApplicationCategoryType` in `Info.plist` (lifestyle / wardrobe)
+- App Sandbox entitlements in `Rack/Cedar-Mac.entitlements` (used only for the Mac Catalyst build)
+
+To ship **iPhone and iPad only** and skip Mac validation, set `SUPPORTS_MACCATALYST: NO` in `project.yml` and run `xcodegen generate`.
+
 ### TestFlight / App Store export compliance
 
 `Rack/Info.plist` sets `ITSAppUsesNonExemptEncryption` to `false`. Cedar only uses exempt encryption (HTTPS for the Anthropic API, standard CloudKit/iOS APIs). This avoids answering the export compliance questionnaire on every upload.

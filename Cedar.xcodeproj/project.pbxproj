@@ -53,6 +53,7 @@
 		7FE7AD0459BDBC8E30883F11 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitor.swift; sourceTree = "<group>"; };
 		920EF961A6D51449FE475A6B /* ClothingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingItem.swift; sourceTree = "<group>"; };
 		98E7EA0AD8818E243C53D314 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		9B02384BDA7C31C50348BE80 /* Cedar-Mac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Cedar-Mac.entitlements"; sourceTree = "<group>"; };
 		9D7A62421066013A2B5C8D95 /* Gender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gender.swift; sourceTree = "<group>"; };
 		A8DB78D6FF68C51C97A15882 /* StorageLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageLocation.swift; sourceTree = "<group>"; };
 		C1978AA48ED3D59C967FC6E5 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
@@ -61,7 +62,7 @@
 		D230DFA585A31234CFBF5D66 /* ClothingType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingType.swift; sourceTree = "<group>"; };
 		D692282B73A61F53175A0273 /* ItemStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStatus.swift; sourceTree = "<group>"; };
 		D6DEA41DB5F4527A21CF4CB1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D9380E223885884A27671DE4 /* Cedar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cedar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9380E223885884A27671DE4 /* Cedar.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Cedar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9CE3A2B6AAF69A1878EBEF7 /* CedarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CedarApp.swift; sourceTree = "<group>"; };
 		EFB044DBC6ED7E7D00B0DC85 /* PeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleView.swift; sourceTree = "<group>"; };
 		F0EC6A013F97E515AE40F4C8 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
@@ -91,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				0DB174B777DB6B07CC4D88E6 /* Assets.xcassets */,
+				9B02384BDA7C31C50348BE80 /* Cedar-Mac.entitlements */,
 				3952275E671A71BF51CEFB90 /* Cedar.entitlements */,
 				FB1F707AAB77F0FC9BD734A2 /* Info.plist */,
 				6E729103AA022F977A9486EF /* App */,
@@ -249,6 +251,7 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					0392B7C334E5F981D6362BCF = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -325,10 +328,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Rack/Cedar.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Rack/Cedar-Mac.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = J7MM7A8SK8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Rack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -348,10 +352,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Rack/Cedar.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Rack/Cedar-Mac.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = J7MM7A8SK8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Rack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (

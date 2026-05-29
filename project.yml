@@ -24,6 +24,7 @@ targets:
         SUPPORTS_MACCATALYST: YES
         INFOPLIST_FILE: Rack/Info.plist
         CODE_SIGN_ENTITLEMENTS: Rack/Cedar.entitlements
+        "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": Rack/Cedar-Mac.entitlements
         DEVELOPMENT_TEAM: ""
         CODE_SIGN_STYLE: Automatic
       configs:
