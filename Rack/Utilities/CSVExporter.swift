@@ -9,6 +9,12 @@ struct CSVExportError: Error, LocalizedError {
 struct CSVExporter {
     static let headers = CSVImporter.expectedHeaders
 
+    private static let dateFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate]
+        return formatter
+    }()
+
     /// Builds CSV text for all clothing items, using the same columns as `CSVImporter`.
     static func exportCSV(context: NSManagedObjectContext) throws -> String {
         let items = try fetchItems(context: context)
@@ -61,7 +67,14 @@ struct CSVExporter {
             escape(priceString(item.listingPrice)),
             escape(priceString(item.donationValue)),
             escape(priceString(item.salePrice)),
+            escape(dateString(item.saleDate)),
+            escape(dateString(item.donatedDate)),
         ]
+    }
+
+    private static func dateString(_ date: Date?) -> String {
+        guard let date else { return "" }
+        return dateFormatter.string(from: date)
     }
 
     private static func priceString(_ number: NSNumber?) -> String {

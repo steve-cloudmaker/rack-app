@@ -102,7 +102,7 @@ Raw string fields on `ClothingItem` are exposed through typed computed propertie
 
 | Enum | Used for |
 |------|----------|
-| `ItemStatus` | Workflow state (Keep, For Sale, Listed, Sold, For Donation, Given Away) |
+| `ItemStatus` | Workflow state (Keep, For Sale, Listed, Sold, For Donation, Donated) |
 | `ClothingType` | Category (shirts, pants, shoes, etc.) |
 | `ClothingSize` | Apparel sizes, grouped by age group |
 | `ShoeSize` | Shoe sizes, grouped by category (baby/toddler, kids, women's, men's) |
@@ -110,7 +110,9 @@ Raw string fields on `ClothingItem` are exposed through typed computed propertie
 | `Gender` | Unisex / male / female |
 | `ItemCondition` | Item condition rating |
 
-**Price fields:** `listingPrice` for the sale workflow (For Sale / Listed / Sold), `donationValue` for the donation workflow (For Donation / Given Away), and `salePrice` when status is Sold. The two values are independent and are not copied when status changes.
+**Price fields:** `listingPrice` for the sale workflow (For Sale / Listed / Sold), `donationValue` for the donation workflow (For Donation / Donated), and `salePrice` when status is Sold. The two values are independent and are not copied when status changes.
+
+**Lifecycle dates:** `saleDate` is set when status is Sold; `donatedDate` when status is Donated. Legacy `"Given Away"` status values are read as Donated.
 
 ## Persistence & Sync
 

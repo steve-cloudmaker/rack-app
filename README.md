@@ -8,7 +8,7 @@ Cedar gives you a complete view of everything in your wardrobe — including kid
 
 - **Full inventory management** — add clothing items with photos (up to 5), brand, size, shoe size, color, condition, and category
 - **Camera & photo library** — take new photos or pick from your library directly in the item form
-- **Two-path status workflow** — Keep → For Sale → Listed → Sold, or Keep → For Donation → Given Away
+- **Two-path status workflow** — Keep → For Sale → Listed → Sold (with sale date), or Keep → For Donation → Donated (with donated date)
 - **Donation value tracking** — record fair market value on donated items (`donationValue`, separate from listing price) for tax deduction purposes
 - **Smart size picker** — baby (months), toddler (T-sizes), kids numeric, letter sizes, and shoe sizes, filtered by age group
 - **People & locations** — assign items to family members and track physical storage locations (rack/row)
@@ -123,7 +123,8 @@ Rack/                              # Source root (historical name; product is Ce
 │   └── AIService.swift            # Claude API integration
 ├── Utilities/
 │   ├── CSVImporter.swift          # CSV import logic
-│   └── CSVExporter.swift          # CSV export logic
+│   ├── CSVExporter.swift          # CSV export logic
+│   └── JSONExporter.swift         # JSON export logic
 ├── Assets.xcassets/               # App icon (MacKinnon tartan + C)
 ├── Cedar.entitlements
 └── Info.plist
@@ -136,7 +137,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed architecture map.
 - [x] CSV import UI (Settings → Import from CSV)
 - [x] CSV export (Settings → Export to CSV)
 - [x] Separate donation value from listing price (with fair-market AI estimation)
-- [ ] Export inventory to JSON
+- [x] Export inventory to JSON
 
 ## License
 

@@ -7,7 +7,13 @@ struct CSVImportError: Error, LocalizedError {
 }
 
 struct CSVImporter {
-    static let expectedHeaders = ["description", "brand", "color", "size", "shoeSize", "type", "ageGroup", "gender", "condition", "status", "owner", "rack", "row", "location", "listingPrice", "donationValue", "salePrice"]
+    static let expectedHeaders = ["description", "brand", "color", "size", "shoeSize", "type", "ageGroup", "gender", "condition", "status", "owner", "rack", "row", "location", "listingPrice", "donationValue", "salePrice", "saleDate", "donatedDate"]
+
+    private static let dateFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate]
+        return formatter
+    }()
 
     static func `import`(from url: URL, context: NSManagedObjectContext) throws -> Int {
         let contents = try String(contentsOf: url, encoding: .utf8)
@@ -39,10 +45,12 @@ struct CSVImporter {
             if let ageStr  = fields["agegroup"], let age   = AgeGroup(rawValue: ageStr.capitalized)   { item.ageGroup = age   }
             if let genStr  = fields["gender"],   let gen   = Gender(rawValue: genStr.capitalized)     { item.gender   = gen   }
             if let condStr = fields["condition"],let cond  = ItemCondition(rawValue: condStr)         { item.condition = cond }
-            if let statStr = fields["status"],   let stat  = ItemStatus(rawValue: statStr)            { item.status   = stat  }
+            if let statStr = fields["status"] { item.status = ItemStatus(storedValue: statStr) }
             if let priceStr = fields["listingprice"], let price = Double(priceStr) { item.listingPrice = NSNumber(value: price) }
             if let priceStr = fields["donationvalue"], let price = Double(priceStr) { item.donationValue = NSNumber(value: price) }
             if let priceStr = fields["saleprice"],    let price = Double(priceStr) { item.salePrice    = NSNumber(value: price) }
+            if let dateStr = fields["saledate"], !dateStr.isEmpty { item.saleDate = dateFormatter.date(from: dateStr) }
+            if let dateStr = fields["donateddate"], !dateStr.isEmpty { item.donatedDate = dateFormatter.date(from: dateStr) }
 
             if let ownerName = fields["owner"]?.trimmingCharacters(in: .whitespacesAndNewlines), !ownerName.isEmpty {
                 item.owner = person(named: ownerName, cache: &peopleByName, context: context)

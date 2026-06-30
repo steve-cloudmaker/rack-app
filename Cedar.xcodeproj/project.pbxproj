@@ -24,6 +24,7 @@
 		9F41F1B3D69C7BEF1C7932AA /* CloudKitSyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE7AD0459BDBC8E30883F11 /* CloudKitSyncMonitor.swift */; };
 		A1B9145DECBF713CCC40B6E9 /* PeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB044DBC6ED7E7D00B0DC85 /* PeopleView.swift */; };
 		A63FFB3F72F64CAA0E8CF7EF /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B4C10381548B7BC4AC0BB2 /* LocationsView.swift */; };
+		AD1BBCEB401597E7743E3BD0 /* JSONExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928790704D9EC01A6389D9B9 /* JSONExporter.swift */; };
 		B4BB46C8D7498661A85DFA4D /* ClothingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920EF961A6D51449FE475A6B /* ClothingItem.swift */; };
 		B7AF13CBF903E7B51862F6CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DB174B777DB6B07CC4D88E6 /* Assets.xcassets */; };
 		BF119AFA484D66E182780643 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B04A912F5645094699D706 /* ItemDetailView.swift */; };
@@ -52,6 +53,7 @@
 		754ADC57F3EC2B31ECD79B54 /* ItemPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemPhoto.swift; sourceTree = "<group>"; };
 		7FE7AD0459BDBC8E30883F11 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitor.swift; sourceTree = "<group>"; };
 		920EF961A6D51449FE475A6B /* ClothingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingItem.swift; sourceTree = "<group>"; };
+		928790704D9EC01A6389D9B9 /* JSONExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONExporter.swift; sourceTree = "<group>"; };
 		98E7EA0AD8818E243C53D314 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		9B02384BDA7C31C50348BE80 /* Cedar-Mac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Cedar-Mac.entitlements"; sourceTree = "<group>"; };
 		9D7A62421066013A2B5C8D95 /* Gender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gender.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			children = (
 				22F7A1D7C97AC87EFE19F3C9 /* CSVExporter.swift */,
 				1C6566E75CBE11B594977E2D /* CSVImporter.swift */,
+				928790704D9EC01A6389D9B9 /* JSONExporter.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				BF119AFA484D66E182780643 /* ItemDetailView.swift in Sources */,
 				05350BD655A949C59CB3E06A /* ItemPhoto.swift in Sources */,
 				04836138614246D65E4976EF /* ItemStatus.swift in Sources */,
+				AD1BBCEB401597E7743E3BD0 /* JSONExporter.swift in Sources */,
 				A63FFB3F72F64CAA0E8CF7EF /* LocationsView.swift in Sources */,
 				A1B9145DECBF713CCC40B6E9 /* PeopleView.swift in Sources */,
 				E3192997859DABC70E6E4451 /* PersistenceController.swift in Sources */,

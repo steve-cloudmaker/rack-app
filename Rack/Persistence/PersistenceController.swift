@@ -132,6 +132,8 @@ final class PersistenceController: @unchecked Sendable {
             attr("listingPrice",   .doubleAttributeType,  optional: true),
             attr("donationValue",  .doubleAttributeType,  optional: true),
             attr("salePrice",      .doubleAttributeType,  optional: true),
+            attr("saleDate",       .dateAttributeType,   optional: true),
+            attr("donatedDate",    .dateAttributeType,   optional: true),
         ]
 
         person.properties = [

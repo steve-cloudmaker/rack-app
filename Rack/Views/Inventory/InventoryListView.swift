@@ -338,7 +338,7 @@ struct StatusBadge: View {
         case .listed:      return .purple
         case .sold:        return .green
         case .forDonation: return .teal
-        case .givenAway:   return .gray
+        case .donated:     return .gray
         }
     }
 

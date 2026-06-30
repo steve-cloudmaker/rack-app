@@ -19,6 +19,8 @@ class ClothingItem: NSManagedObject {
     @NSManaged var listingPrice: NSNumber?
     @NSManaged var donationValue: NSNumber?
     @NSManaged var salePrice: NSNumber?
+    @NSManaged var saleDate: Date?
+    @NSManaged var donatedDate: Date?
     @NSManaged var photos: NSSet?
     @NSManaged var owner: Person?
     @NSManaged var location: StorageLocation?
@@ -43,7 +45,7 @@ class ClothingItem: NSManagedObject {
     // MARK: - Typed accessors
 
     var status: ItemStatus {
-        get { ItemStatus(rawValue: statusRaw) ?? .keep }
+        get { ItemStatus(storedValue: statusRaw) }
         set { statusRaw = newValue.rawValue; updatedAt = Date() }
     }
 
@@ -94,7 +96,7 @@ class ClothingItem: NSManagedObject {
     }
 
     var canHaveDonationValue: Bool {
-        status == .forDonation || status == .givenAway
+        status == .forDonation || status == .donated
     }
 
 }

@@ -200,6 +200,14 @@ struct ItemDetailView: View {
             Picker("Status", selection: $draft.status) {
                 ForEach(ItemStatus.allCases) { s in Text(s.displayName).tag(s) }
             }
+            .onChange(of: draft.status) { _, newStatus in
+                if newStatus == .sold, draft.saleDate == nil {
+                    draft.saleDate = Date()
+                }
+                if newStatus == .donated, draft.donatedDate == nil {
+                    draft.donatedDate = Date()
+                }
+            }
 
             if draft.status.isForSelling {
                 priceRow(label: "Listing Price", value: $draft.listingPrice)
@@ -211,13 +219,31 @@ struct ItemDetailView: View {
                             .multilineTextAlignment(.trailing)
                             .keyboardType(.decimalPad)
                     }
+                    DatePicker("Sale Date", selection: saleDateBinding, displayedComponents: .date)
                 }
             }
 
             if draft.status.isForDonating {
                 priceRow(label: "Donation Value", value: $draft.donationValue)
+                if draft.status == .donated {
+                    DatePicker("Donated Date", selection: donatedDateBinding, displayedComponents: .date)
+                }
             }
         }
+    }
+
+    private var saleDateBinding: Binding<Date> {
+        Binding(
+            get: { draft.saleDate ?? Date() },
+            set: { draft.saleDate = $0 }
+        )
+    }
+
+    private var donatedDateBinding: Binding<Date> {
+        Binding(
+            get: { draft.donatedDate ?? Date() },
+            set: { draft.donatedDate = $0 }
+        )
     }
 
     private func priceRow(label: String, value: Binding<Double?>) -> some View {
@@ -331,6 +357,8 @@ struct ItemDetailView: View {
         item.listingPrice  = draft.listingPrice.map  { NSNumber(value: $0) }
         item.donationValue = draft.donationValue.map { NSNumber(value: $0) }
         item.salePrice     = draft.salePrice.map     { NSNumber(value: $0) }
+        item.saleDate      = draft.status == .sold ? draft.saleDate : nil
+        item.donatedDate   = draft.status == .donated ? draft.donatedDate : nil
         item.updatedAt    = Date()
 
         item.owner    = people.first    { $0.id == draft.ownerID }
@@ -409,6 +437,8 @@ struct ItemDraft {
     var listingPrice: Double?   = nil
     var donationValue: Double?  = nil
     var salePrice: Double?      = nil
+    var saleDate: Date?         = nil
+    var donatedDate: Date?      = nil
     var ownerID: UUID?          = nil
     var locationID: UUID?       = nil
 
@@ -428,6 +458,8 @@ struct ItemDraft {
         listingPrice    = item.listingPrice?.doubleValue
         donationValue   = item.donationValue?.doubleValue
         salePrice       = item.salePrice?.doubleValue
+        saleDate        = item.saleDate
+        donatedDate     = item.donatedDate
         ownerID         = item.owner?.id
         locationID      = item.location?.id
 

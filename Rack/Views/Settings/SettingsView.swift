@@ -18,8 +18,34 @@ struct SettingsView: View {
     @State private var importError: String?
     @State private var isExporting = false
     @State private var exportURL: URL?
+    @State private var exportFormat: ExportFormat = .csv
     @State private var showingExportShare = false
     @State private var exportError: String?
+
+    private enum ExportFormat {
+        case csv, json
+
+        var shareTitle: String {
+            switch self {
+            case .csv: return "Cedar Closet CSV Export"
+            case .json: return "Cedar Closet JSON Export"
+            }
+        }
+
+        var shareIcon: String {
+            switch self {
+            case .csv: return "tablecells"
+            case .json: return "curlybraces"
+            }
+        }
+
+        var shareButtonLabel: String {
+            switch self {
+            case .csv: return "Share CSV File"
+            case .json: return "Share JSON File"
+            }
+        }
+    }
 
     @FetchRequest(fetchRequest: {
         let req = ClothingItem.fetchRequest()
@@ -123,19 +149,30 @@ struct SettingsView: View {
                     .disabled(isImporting || isExporting)
 
                     Button {
-                        exportCSV()
+                        exportInventory(format: .csv)
                     } label: {
                         HStack {
                             Label("Export to CSV…", systemImage: "square.and.arrow.up")
                             Spacer()
-                            if isExporting { ProgressView().scaleEffect(0.8) }
+                            if isExporting && exportFormat == .csv { ProgressView().scaleEffect(0.8) }
+                        }
+                    }
+                    .disabled(isImporting || isExporting || !hasItems)
+
+                    Button {
+                        exportInventory(format: .json)
+                    } label: {
+                        HStack {
+                            Label("Export to JSON…", systemImage: "curlybraces")
+                            Spacer()
+                            if isExporting && exportFormat == .json { ProgressView().scaleEffect(0.8) }
                         }
                     }
                     .disabled(isImporting || isExporting || !hasItems)
                 } header: {
                     Text("Data")
                 } footer: {
-                    Text("Import or export clothing items as CSV. Export uses the same columns as import (description, brand, color, size, type, status, owner, location, prices). Photos are not included.")
+                    Text("Import or export clothing items. CSV uses flat rows (same columns as import). JSON includes people, locations, and items with IDs for a full backup. Photos are not included in either format.")
                 }
 
                 Section("About") {
@@ -178,9 +215,9 @@ struct SettingsView: View {
                     NavigationStack {
                         ShareLink(
                             item: exportURL,
-                            preview: SharePreview("Cedar Closet Export", icon: Image(systemName: "tablecells"))
+                            preview: SharePreview(exportFormat.shareTitle, icon: Image(systemName: exportFormat.shareIcon))
                         ) {
-                            Label("Share CSV File", systemImage: "square.and.arrow.up")
+                            Label(exportFormat.shareButtonLabel, systemImage: "square.and.arrow.up")
                         }
                         .padding()
                         .navigationTitle("Export")
@@ -236,12 +273,16 @@ struct SettingsView: View {
         }
     }
 
-    private func exportCSV() {
+    private func exportInventory(format: ExportFormat) {
         isExporting = true
+        exportFormat = format
         Task { @MainActor in
             defer { isExporting = false }
             do {
-                exportURL = try CSVExporter.exportToTemporaryFile(context: managedObjectContext)
+                exportURL = switch format {
+                case .csv: try CSVExporter.exportToTemporaryFile(context: managedObjectContext)
+                case .json: try JSONExporter.exportToTemporaryFile(context: managedObjectContext)
+                }
                 showingExportShare = true
             } catch {
                 exportError = error.localizedDescription
