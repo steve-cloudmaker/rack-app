@@ -25,7 +25,7 @@ targets:
         INFOPLIST_FILE: Rack/Info.plist
         CODE_SIGN_ENTITLEMENTS: Rack/Cedar.entitlements
         "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": Rack/Cedar-Mac.entitlements
-        DEVELOPMENT_TEAM: ""
+        DEVELOPMENT_TEAM: J7MM7A8SK8
         CODE_SIGN_STYLE: Automatic
       configs:
         Debug:

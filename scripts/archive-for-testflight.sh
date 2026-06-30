@@ -21,6 +21,7 @@ xcodebuild \
   -configuration Release \
   -destination 'generic/platform=iOS' \
   -archivePath "$ARCHIVE_PATH" \
+  -allowProvisioningUpdates \
   archive
 
 echo "Exporting IPA for App Store Connect…"
@@ -28,13 +29,14 @@ xcodebuild \
   -exportArchive \
   -archivePath "$ARCHIVE_PATH" \
   -exportPath "$EXPORT_PATH" \
-  -exportOptionsPlist "$EXPORT_OPTIONS"
+  -exportOptionsPlist "$EXPORT_OPTIONS" \
+  -allowProvisioningUpdates
 
 echo ""
-echo "Done. Upload this IPA to TestFlight:"
+echo "Done. IPA ready at:"
 echo "  $EXPORT_PATH/Cedar.ipa"
 echo ""
-echo "Upload options:"
-echo "  • Transporter app (drag Cedar.ipa)"
-echo "  • Xcode → Organizer → Distribute App"
-echo "  • xcrun altool --upload-app -f \"$EXPORT_PATH/Cedar.ipa\" --type ios --apiKey KEY --apiIssuer ISSUER"
+echo "Upload to TestFlight:"
+echo "  ./scripts/upload-to-testflight.sh"
+echo ""
+echo "Requires App Store Connect API key env vars (see scripts/upload-to-testflight.sh)."
