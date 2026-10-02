@@ -2,6 +2,8 @@
 
 This document maps how Cedar Closet Manager is structured: entry points, navigation, data model, persistence, and external integrations.
 
+For a short doc map and release checklist, see [Common/START_HERE.md](Common/START_HERE.md). For agent-oriented gotchas and account facts, see [Common/AI_ONBOARDING.md](Common/AI_ONBOARDING.md).
+
 ## Overview
 
 Cedar is a single-target SwiftUI app. All source lives under `Rack/`. The app catalogs clothing items, assigns them to people and storage locations, tracks resale/donation workflows, optionally calls the Anthropic API for descriptions and pricing, and syncs data through CloudKit.
@@ -32,7 +34,7 @@ Cedar is a single-target SwiftUI app. All source lives under `Rack/`. The app ca
 | Component | Role |
 |-----------|------|
 | `CedarApp` | Creates the window, attaches `AppDelegate`, injects `PersistenceController.shared.viewContext` into the SwiftUI environment |
-| `AppDelegate` | Handles `userDidAcceptCloudKitShareWith` and forwards metadata to `PersistenceController.acceptShare` |
+| `AppDelegate` | Handles `userDidAcceptCloudKitShareWith` and forwards metadata to `PersistenceController.acceptShare`; refreshes iCloud account status via `CloudKitSyncMonitor` at launch |
 | `ContentView` | Root shell; chooses layout by horizontal size class |
 | `SplashScreenView` | Full-screen tartan splash on launch; dismisses via callback |
 
@@ -73,6 +75,8 @@ erDiagram
         double listingPrice
         double donationValue
         double salePrice
+        Date saleDate
+        Date donatedDate
     }
 
     ItemPhoto {
@@ -126,6 +130,13 @@ Raw string fields on `ClothingItem` are exposed through typed computed propertie
 | `Shared` | `Cedar-shared.sqlite` | `.shared` | Data from accepted share invitations |
 
 Both stores use container `iCloud.com.stevedaurora.cedar` with persistent history tracking and remote change notifications enabled. The view context merges automatically with `NSMergeByPropertyObjectTrumpMergePolicy`.
+
+### Sync Monitoring
+
+`CloudKitSyncMonitor` (`Persistence/CloudKitSyncMonitor.swift`) is a `@MainActor @Observable` singleton that backs **Settings → iCloud Sync**:
+
+- **Account status** — `refreshAccountStatus()` queries `CKContainer(identifier: "iCloud.com.stevedaurora.cedar").accountStatus()` and maps it to a user-facing message (called at launch, when Settings appears, and from the **Refresh iCloud Status** button).
+- **Sync activity** — `PersistenceController` observes `NSPersistentCloudKitContainer.eventChangedNotification` and forwards each event to `handleCloudKitEvent(_:)`, which tracks whether a setup/import/export is in progress and records the last success or failure message.
 
 ### CloudKit Sharing Flow
 
@@ -224,7 +235,16 @@ After acceptance, shared items live in the **Shared** store configuration. The p
 
 ### Settings (`Views/Settings/`)
 
-`SettingsView` — Anthropic API key storage (`@AppStorage`), AI feature status, family sharing entry point, app version.
+`SettingsView` sections:
+
+| Section | Contents |
+|---------|----------|
+| Anthropic API Key | Key storage (`@AppStorage`, device-only) |
+| AI Features | Whether description/price wands are enabled |
+| iCloud Sync | Account status and latest sync activity from `CloudKitSyncMonitor`, refresh button |
+| Family Sharing | "Share Closet…" → `PersistenceController.prepareShare()` → `CloudSharingView` |
+| Data | Import from CSV; export to CSV or JSON via share sheet |
+| About | App version |
 
 ### Sharing (`Views/Sharing/`)
 
@@ -246,14 +266,18 @@ API key is read from `UserDefaults` (`anthropic_api_key`). When empty, wand butt
 
 ## Utilities
 
-### CSVImporter (`Utilities/CSVImporter.swift`)
-
-Parses CSV files and creates `ClothingItem` records in a given `NSManagedObjectContext`. Supports columns for description, brand, color, size, shoeSize, type, ageGroup, gender, condition, status, owner, rack, row, location, listingPrice, donationValue, and salePrice.
+| Utility | Role |
+|---------|------|
+| `CSVImporter` | Parses CSV and creates `ClothingItem` records in a given context. Columns: description, brand, color, size, shoeSize, type, ageGroup, gender, condition, status, owner, rack, row, location, listingPrice, donationValue, salePrice, saleDate, donatedDate (dates are ISO 8601 full-date) |
+| `CSVExporter` | Writes all items as CSV using the same columns as `CSVImporter` (round-trippable) |
+| `JSONExporter` | Writes a versioned (`exportVersion = 1`) `CedarExport` document with people, locations, and items including IDs and lifecycle dates — a full backup minus photos |
 
 **Wired to UI** via Settings → Data:
 
 - **Import** — `.fileImporter` → `CSVImporter.import(from:context:)`
-- **Export** — `CSVExporter.exportToTemporaryFile(context:)` → share sheet (`ShareLink`)
+- **Export** — `CSVExporter` / `JSONExporter.exportToTemporaryFile(context:)` → share sheet (`ShareLink`)
+
+Neither format includes photos.
 
 ## Key Data Flows
 
@@ -299,15 +323,36 @@ InventoryListView.onDelete
 
 ## Build & Project Generation
 
-- **XcodeGen** — `project.yml` generates `Cedar.xcodeproj`
+- **XcodeGen** — `project.yml` generates `Cedar.xcodeproj`; re-run `xcodegen generate` after changing it
 - **Bundle ID** — `com.stevedaurora.cedar`
 - **Display name** — Cedar Closet Manager (set in `Info.plist`)
+- **Version / build** — `CFBundleShortVersionString` and `CFBundleVersion` in `Rack/Info.plist` (currently **1.1** / build **3**)
 - **Platforms** — iPhone, iPad, Mac Catalyst (`SUPPORTS_MACCATALYST: YES`)
-- **Entitlements** — CloudKit container in `Rack/Cedar.entitlements`
+- **Signing** — Automatic, `DEVELOPMENT_TEAM: J7MM7A8SK8` (set in `project.yml` so command-line builds can sign)
+- **Entitlements** — `Rack/Cedar.entitlements` (iOS: CloudKit container); `Rack/Cedar-Mac.entitlements` for `sdk=macosx*` (App Sandbox, network client, user-selected files, CloudKit)
+- **App Store metadata in `Info.plist`** — `ITSAppUsesNonExemptEncryption = false`, `LSApplicationCategoryType = public.app-category.lifestyle` (required for Mac Catalyst uploads)
+
+### Release pipeline (TestFlight)
+
+```
+scripts/archive-for-testflight.sh
+    → xcodegen generate (if project missing)
+    → xcodebuild archive  (Release, generic/platform=iOS, -allowProvisioningUpdates) → build/Cedar.xcarchive
+    → xcodebuild -exportArchive (ExportOptions-app-store.plist)                    → build/export/Cedar.ipa
+scripts/upload-to-testflight.sh
+    → xcrun altool --upload-app (App Store Connect API key: ASC_API_KEY_ID / ASC_API_ISSUER_ID / .p8)
+    → App Store Connect processes build → TestFlight
+```
+
+`build/` is gitignored. See the README for API key setup.
 
 ## File Index
 
 ```
+Common/
+├── START_HERE.md
+└── AI_ONBOARDING.md
+
 Rack/
 ├── App/
 │   ├── CedarApp.swift
@@ -327,10 +372,11 @@ Rack/
 │   ├── ItemStatus.swift
 │   └── ShoeSize.swift
 ├── Persistence/
-│   └── PersistenceController.swift
+│   ├── PersistenceController.swift
+│   └── CloudKitSyncMonitor.swift
 ├── Views/
 │   ├── Inventory/
-│   │   ├── InventoryListView.swift
+│   │   ├── InventoryListView.swift   # also contains FilterSheetView, FilterChip, ItemRowView, StatusBadge
 │   │   └── ItemDetailView.swift      # also contains CameraView, ItemDraft
 │   ├── People/
 │   │   └── PeopleView.swift
@@ -343,6 +389,16 @@ Rack/
 │   └── SplashScreenView.swift        # also contains TartanView
 ├── Services/
 │   └── AIService.swift
-└── Utilities/
-    └── CSVImporter.swift
+├── Utilities/
+│   ├── CSVImporter.swift
+│   ├── CSVExporter.swift
+│   └── JSONExporter.swift
+├── Cedar.entitlements
+├── Cedar-Mac.entitlements
+└── Info.plist
+
+scripts/
+├── archive-for-testflight.sh
+├── upload-to-testflight.sh
+└── ExportOptions-app-store.plist
 ```

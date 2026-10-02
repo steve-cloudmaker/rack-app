@@ -4,6 +4,8 @@ A personal clothing inventory app for iPhone, iPad, and Mac Catalyst, built with
 
 Cedar gives you a complete view of everything in your wardrobe — including kids clothes that have been outgrown — and helps you track what to keep, donate, or list on Poshmark.
 
+**New here?** Start with [Common/START_HERE.md](Common/START_HERE.md). AI assistants should also read [Common/AI_ONBOARDING.md](Common/AI_ONBOARDING.md).
+
 ## Features
 
 - **Full inventory management** — add clothing items with photos (up to 5), brand, size, shoe size, color, condition, and category
@@ -18,6 +20,8 @@ Cedar gives you a complete view of everything in your wardrobe — including kid
 - **AI price estimation** — get resale price suggestions via Claude
 - **iCloud sync** — keep inventory in sync across all your iPhone and iPad devices
 - **Family sharing** — share your closet with family members via CloudKit (Settings → Share Closet)
+- **Import & export** — CSV import/export (flat rows) and a full JSON backup of people, locations, and items (Settings → Data; photos not included)
+- **Sync status** — Settings → iCloud Sync shows iCloud account status and the latest CloudKit import/export activity
 - **Undo support** — Core Data undo manager is wired to the system undo manager (shake-to-undo on device)
 - **MacKinnon Hunting tartan** — splash screen and subtle app background
 
@@ -42,7 +46,7 @@ Cedar gives you a complete view of everything in your wardrobe — including kid
 1. Clone the repository
 2. Run `xcodegen generate` to create `Cedar.xcodeproj`
 3. Open `Cedar.xcodeproj` in Xcode
-4. Set your Development Team in **Signing & Capabilities**
+4. Signing uses Automatic style with Development Team `J7MM7A8SK8` (set in `project.yml`). To build under a different team, change `DEVELOPMENT_TEAM` there and re-run `xcodegen generate` — edits made only in Xcode's **Signing & Capabilities** are overwritten on the next generate.
 5. Build and run (`Cmd+R`)
 
 ### Mac Catalyst (App Store / TestFlight)
@@ -58,13 +62,51 @@ To ship **iPhone and iPad only** and skip Mac validation, set `SUPPORTS_MACCATAL
 
 `Rack/Info.plist` sets `ITSAppUsesNonExemptEncryption` to `false`. Cedar only uses exempt encryption (HTTPS for the Anthropic API, standard CloudKit/iOS APIs). This avoids answering the export compliance questionnaire on every upload.
 
-To build an App Store IPA for TestFlight upload:
+### TestFlight from the command line
+
+The full archive → export → upload flow runs from the terminal via two scripts in `scripts/`.
+
+**1. Archive and export the IPA**
 
 ```bash
 ./scripts/archive-for-testflight.sh
 ```
 
-The IPA is written to `build/export/Cedar.ipa` (upload via Transporter or Xcode Organizer).
+- Runs `xcodegen generate` first if `Cedar.xcodeproj` is missing
+- Archives the `Cedar` scheme (Release, `generic/platform=iOS`) to `build/Cedar.xcarchive`
+- Exports with `scripts/ExportOptions-app-store.plist` (`app-store-connect`, automatic signing, team `J7MM7A8SK8`, symbols uploaded)
+- Passes `-allowProvisioningUpdates` so Xcode can create or refresh the distribution certificate and provisioning profile without opening the IDE
+- Writes the IPA to `build/export/Cedar.ipa`
+
+**2. Upload to TestFlight**
+
+```bash
+export ASC_API_KEY_ID=XXXXXXXXXX
+export ASC_API_ISSUER_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+./scripts/upload-to-testflight.sh            # or pass a path to a different .ipa
+```
+
+Uploads with `xcrun altool` using an App Store Connect API key (create one under **App Store Connect → Users and Access → Integrations → App Store Connect API**). The `.p8` key file is located from, in order:
+
+1. `ASC_API_KEY_PATH` (explicit path)
+2. `~/.appstoreconnect/private_keys/AuthKey_<KEY_ID>.p8`
+3. `~/.private_keys/AuthKey_<KEY_ID>.p8`
+
+Never commit the `.p8` file. Processing usually takes 5–15 minutes before the build appears under **TestFlight** in App Store Connect.
+
+**Version and build number**
+
+`CFBundleShortVersionString` (marketing version) and `CFBundleVersion` (build number) are set directly in `Rack/Info.plist`. Current shipping line: **1.1** (build **3**). App Store Connect rejects an upload whose build number was already used for that version, so bump `CFBundleVersion` before each new upload.
+
+Transporter or Xcode → Organizer → Distribute App still work as manual alternatives for uploading `build/export/Cedar.ipa`.
+
+**CLI troubleshooting**
+
+| Symptom | Likely cause | What to do |
+|---------|--------------|------------|
+| `PLA Update available` / no iOS Distribution certificate on export | Developer Program License Agreement not accepted | Accept at [developer.apple.com/account](https://developer.apple.com/account), retry archive |
+| `REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED` / `altool` cannot map bundle ID | App Store Connect agreements pending | Accept agreements under [Agreements, Tax, and Banking](https://appstoreconnect.apple.com/agreements). Banking “pending processing” does **not** block TestFlight once agreements are Active |
+| Empty CloudKit container list in Xcode | Same as PLA / portal refresh | Accept agreements, reopen Signing & Capabilities — do not recreate the container unless it is actually gone |
 
 ### iCloud Sync
 
@@ -99,6 +141,10 @@ Add your [Anthropic API key](https://console.anthropic.com/) in the app under **
 ## Project Structure
 
 ```
+Common/
+├── START_HERE.md                  # Doc map and entry points
+└── AI_ONBOARDING.md               # Context for AI assistants (gotchas, credentials, release)
+
 Rack/                              # Source root (historical name; product is Cedar)
 ├── App/
 │   ├── CedarApp.swift             # App entry point, injects managedObjectContext
@@ -111,12 +157,13 @@ Rack/                              # Source root (historical name; product is Ce
 │   └── ItemPhoto.swift
 ├── Enums/                         # ItemStatus, ClothingType, ClothingSize, ShoeSize, AgeGroup, Gender, ItemCondition
 ├── Persistence/
-│   └── PersistenceController.swift  # Programmatic Core Data model + CloudKit container
+│   ├── PersistenceController.swift  # Programmatic Core Data model + CloudKit container
+│   └── CloudKitSyncMonitor.swift    # iCloud account status + sync event reporting for Settings
 ├── Views/
 │   ├── Inventory/                 # InventoryListView, ItemDetailView, CameraView
 │   ├── People/                    # PeopleView
 │   ├── Locations/                 # LocationsView, AddLocationView
-│   ├── Settings/                  # SettingsView (API key, family sharing)
+│   ├── Settings/                  # SettingsView (API key, iCloud sync status, family sharing, import/export)
 │   ├── Sharing/                   # CloudSharingView (UICloudSharingController wrapper)
 │   └── SplashScreenView.swift     # Splash + TartanView background
 ├── Services/
@@ -126,8 +173,16 @@ Rack/                              # Source root (historical name; product is Ce
 │   ├── CSVExporter.swift          # CSV export logic
 │   └── JSONExporter.swift         # JSON export logic
 ├── Assets.xcassets/               # App icon (MacKinnon tartan + C)
-├── Cedar.entitlements
-└── Info.plist
+├── Cedar.entitlements             # iOS/iPadOS: CloudKit container
+├── Cedar-Mac.entitlements         # Mac Catalyst: App Sandbox + CloudKit
+└── Info.plist                     # Version/build number, export compliance, Mac app category
+
+scripts/
+├── archive-for-testflight.sh      # Archive + export App Store IPA
+├── upload-to-testflight.sh        # Upload IPA via App Store Connect API key
+└── ExportOptions-app-store.plist  # Export options used by the archive script
+
+project.yml                        # XcodeGen spec (generates Cedar.xcodeproj)
 ```
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed architecture map.
