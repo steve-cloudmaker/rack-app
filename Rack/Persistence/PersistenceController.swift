@@ -65,6 +65,103 @@ final class PersistenceController: @unchecked Sendable {
 
     // MARK: - CloudKit sync
 
+    /// Pushes the current Core Data model into the CloudKit **Development** schema
+    /// (private DB only — the Shared store cannot accept schema init writes).
+    /// After this succeeds, deploy Development → Production in CloudKit Console
+    /// so TestFlight builds can export fields like `CD_saleDate`.
+    func initializeDevelopmentSchema() async throws {
+        let account = try await CKContainer(identifier: "iCloud.com.stevedaurora.cedar").accountStatus()
+        guard account == .available else {
+            throw SchemaInitError(
+                message: "iCloud account is not available on this device/simulator (status: \(account)). Sign in under Settings → Apple ID, then retry."
+            )
+        }
+
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            // Must not block the main actor — loadPersistentStores may callback on main.
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    try Self.performPrivateStoreSchemaInitialization()
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: SchemaInitError(message: Self.detailedErrorDescription(error)))
+                }
+            }
+        }
+    }
+
+    private static func performPrivateStoreSchemaInitialization() throws {
+        let model = makeModel()
+        let tempContainer = NSPersistentCloudKitContainer(name: "Cedar", managedObjectModel: model)
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("Cedar-schema-init-\(UUID().uuidString).sqlite")
+        defer {
+            try? FileManager.default.removeItem(at: tempURL)
+            try? FileManager.default.removeItem(at: URL(fileURLWithPath: tempURL.path + "-shm"))
+            try? FileManager.default.removeItem(at: URL(fileURLWithPath: tempURL.path + "-wal"))
+        }
+
+        let desc = NSPersistentStoreDescription(url: tempURL)
+        desc.configuration = privateConfigurationName
+        desc.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
+            containerIdentifier: "iCloud.com.stevedaurora.cedar"
+        )
+        desc.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        desc.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        tempContainer.persistentStoreDescriptions = [desc]
+
+        var loadError: Error?
+        let group = DispatchGroup()
+        group.enter()
+        tempContainer.loadPersistentStores { _, error in
+            loadError = error
+            group.leave()
+        }
+        group.wait()
+        if let loadError { throw loadError }
+
+        // Dry-run first surfaces model validation failures more clearly.
+        try tempContainer.initializeCloudKitSchema(options: [.dryRun])
+        try tempContainer.initializeCloudKitSchema(options: [])
+    }
+
+    private static func detailedErrorDescription(_ error: Error) -> String {
+        let ns = error as NSError
+        var lines = ["\(ns.domain) (\(ns.code)): \(ns.localizedDescription)"]
+        if let reason = ns.userInfo[NSLocalizedFailureReasonErrorKey] as? String {
+            lines.append(reason)
+        }
+        if let debug = ns.userInfo["NSDebugDescription"] as? String {
+            lines.append(debug)
+        }
+        if let underlying = ns.userInfo[NSUnderlyingErrorKey] as? Error {
+            lines.append("cause: \(detailedErrorDescription(underlying))")
+        }
+        if let ck = error as? CKError, ck.code == .partialFailure,
+           let partial = ck.partialErrorsByItemID {
+            for (_, value) in partial.prefix(5) {
+                lines.append("partial: \(detailedErrorDescription(value))")
+            }
+        }
+        // Catch any remaining useful userInfo entries.
+        for (key, value) in ns.userInfo {
+            let keyString = key as? String ?? String(describing: key)
+            if [NSLocalizedFailureReasonErrorKey, "NSDebugDescription", NSUnderlyingErrorKey,
+                NSLocalizedDescriptionKey].contains(keyString) { continue }
+            if value is Error { continue }
+            let text = String(describing: value)
+            if text.count < 400 {
+                lines.append("\(keyString): \(text)")
+            }
+        }
+        return lines.joined(separator: "\n")
+    }
+
+    struct SchemaInitError: LocalizedError {
+        let message: String
+        var errorDescription: String? { message }
+    }
+
     func setupCloudKitSync() {
         NotificationCenter.default.addObserver(
             forName: NSPersistentCloudKitContainer.eventChangedNotification,

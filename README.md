@@ -121,6 +121,20 @@ The app uses two Core Data store configurations:
 - **Default** — your personal closet data (same CloudKit zone SwiftData used)
 - **Shared** — data received from CloudKit share invitations
 
+**Debug vs TestFlight databases:** Xcode Debug builds sync to CloudKit
+**Development**; TestFlight / App Store builds use **Production**. They do not
+share data. After adding Core Data attributes (for example `saleDate` →
+CloudKit field `CD_saleDate`), you must update the Development schema and
+**deploy it to Production** or TestFlight exports fail.
+
+#### Updating the CloudKit schema after a model change
+
+1. Run a **Debug** build on a **physical device** signed into iCloud (simulators are unreliable for schema init).
+2. **Settings → Developer → Initialize CloudKit Development Schema** (Debug builds only).
+3. In [CloudKit Console](https://icloud.developer.apple.com/dashboard) → `iCloud.com.stevedaurora.cedar` → Development → Schema, confirm new fields (e.g. `CD_saleDate` on `CD_ClothingItem`).
+4. **Deploy Schema Changes…** to Production and confirm the fields appear there.
+5. Relaunch the TestFlight build and check **Settings → iCloud Sync**.
+
 ### Troubleshooting sync on a new device
 
 1. Sign in to the **same Apple ID** on both devices (Settings → Apple ID → iCloud).
@@ -130,6 +144,12 @@ The app uses two Core Data store configurations:
 5. Check **Settings → iCloud Sync** for account status and recent import/export activity.
 
 If data still does not appear, your closet may only exist on the primary device’s local database and never reached iCloud (for example, after a pre-CloudKit store reset). Use **Settings → Import from CSV** as a fallback.
+
+| Symptom | Likely cause | What to do |
+|---------|--------------|------------|
+| Export failed: `CKErrorDomain error 2` | Production schema missing a new field (`partialFailure`) | Initialize Development schema on a device, deploy to Production (steps above) |
+| Schema init fails in Simulator | CloudKit schema init is flaky without a real device/account | Use a physical iPhone/iPad signed into iCloud |
+| Status Available, but Activity shows Export failed | Account OK; record sync failing | Check schema / Console; local inventory is usually still intact |
 
 ### AI Features
 

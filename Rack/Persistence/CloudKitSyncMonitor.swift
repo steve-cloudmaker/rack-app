@@ -33,7 +33,7 @@ final class CloudKitSyncMonitor {
         // endDate is Date.distantPast while an import/export is in progress
         isSyncing = event.endDate == Date.distantPast
 
-        let store = event.storeIdentifier.isEmpty ? "store" : event.storeIdentifier
+        let store = shortStoreLabel(event.storeIdentifier)
         let type: String = switch event.type {
         case .import: "Import"
         case .export: "Export"
@@ -43,10 +43,49 @@ final class CloudKitSyncMonitor {
         if event.succeeded {
             lastEventMessage = "\(type) finished (\(store))"
         } else if let error = event.error {
-            lastEventMessage = "\(type) failed: \(error.localizedDescription)"
+            let detail = Self.describe(error)
+            lastEventMessage = "\(type) failed (\(store)): \(detail)"
+            print("[Cedar] CloudKit \(type) failed (\(store)): \(detail)")
+            print("[Cedar] CloudKit underlying: \(error)")
         } else if isSyncing {
             lastEventMessage = "\(type) in progress (\(store))…"
         }
+    }
+
+    private func shortStoreLabel(_ storeIdentifier: String) -> String {
+        if storeIdentifier.isEmpty { return "store" }
+        if storeIdentifier.contains("shared") { return "Shared" }
+        if storeIdentifier.contains("private") { return "Default" }
+        return storeIdentifier
+    }
+
+    /// Unpacks CKError.partialFailure (code 2) and nested Core Data errors into a readable string.
+    private static func describe(_ error: Error) -> String {
+        let ns = error as NSError
+        var parts: [String] = ["\(ns.domain) \(ns.code): \(ns.localizedDescription)"]
+
+        if let ck = error as? CKError, ck.code == .partialFailure,
+           let partial = ck.partialErrorsByItemID {
+            let nested = partial.values
+                .prefix(3)
+                .map { describe($0) }
+            if !nested.isEmpty {
+                parts.append("partial: " + nested.joined(separator: " | "))
+            }
+        }
+
+        if let underlying = ns.userInfo[NSUnderlyingErrorKey] as? Error {
+            parts.append("cause: \(describe(underlying))")
+        }
+
+        // NSPersistentCloudKitContainer often nests useful strings under these keys.
+        for key in ["NSDebugDescription", "NSLocalizedFailureReason"] {
+            if let value = ns.userInfo[key] as? String, !value.isEmpty {
+                parts.append(value)
+            }
+        }
+
+        return parts.joined(separator: " — ")
     }
 
     private static func message(for status: CKAccountStatus) -> String {

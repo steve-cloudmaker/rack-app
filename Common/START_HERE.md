@@ -28,14 +28,18 @@ Local checkout is typically `~/projects/cedar`. GitHub remote:
 
 ## If you're shipping a TestFlight build
 
-1. Bump `CFBundleVersion` in `Rack/Info.plist` (App Store Connect rejects reuse)
-2. `./scripts/archive-for-testflight.sh`
-3. Ensure `ASC_API_KEY_ID` / `ASC_API_ISSUER_ID` are set and the `.p8` is in `~/.appstoreconnect/private_keys/`
-4. `./scripts/upload-to-testflight.sh`
-5. Wait 5–15 minutes in App Store Connect → TestFlight
+1. If you added Core Data / CloudKit fields since the last Production schema
+   deploy: initialize **Development** schema on a **physical device**
+   (Debug → Settings → Developer), then **Deploy Schema Changes** to
+   Production in CloudKit Console — see README / `AI_ONBOARDING.md`
+2. Bump `CFBundleVersion` in `Rack/Info.plist` (App Store Connect rejects reuse)
+3. `./scripts/archive-for-testflight.sh`
+4. Ensure `ASC_API_KEY_ID` / `ASC_API_ISSUER_ID` are set and the `.p8` is in `~/.appstoreconnect/private_keys/`
+5. `./scripts/upload-to-testflight.sh`
+6. Wait 5–15 minutes in App Store Connect → TestFlight
 
-Details and troubleshooting (PLA / ASC agreements, distribution certs) are in
-the README and [`AI_ONBOARDING.md`](AI_ONBOARDING.md).
+Details and troubleshooting (PLA / ASC agreements, distribution certs,
+CloudKit schema) are in the README and [`AI_ONBOARDING.md`](AI_ONBOARDING.md).
 
 ## If you're an AI assistant
 

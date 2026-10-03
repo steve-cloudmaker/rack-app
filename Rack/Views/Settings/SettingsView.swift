@@ -21,6 +21,8 @@ struct SettingsView: View {
     @State private var exportFormat: ExportFormat = .csv
     @State private var showingExportShare = false
     @State private var exportError: String?
+    @State private var isInitializingSchema = false
+    @State private var schemaInitMessage: String?
 
     private enum ExportFormat {
         case csv, json
@@ -177,7 +179,36 @@ struct SettingsView: View {
 
                 Section("About") {
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
+                    LabeledContent("Build", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "—")
                 }
+
+                #if DEBUG
+                Section {
+                    Button {
+                        isInitializingSchema = true
+                        Task {
+                            defer { isInitializingSchema = false }
+                            do {
+                                try await PersistenceController.shared.initializeDevelopmentSchema()
+                                schemaInitMessage = "Development schema updated. In CloudKit Console, confirm CD_saleDate on CD_ClothingItem, then Deploy Schema Changes to Production."
+                            } catch {
+                                schemaInitMessage = "Schema init failed:\n\n\(error.localizedDescription)"
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Label("Initialize CloudKit Development Schema", systemImage: "icloud.and.arrow.up")
+                            Spacer()
+                            if isInitializingSchema { ProgressView().scaleEffect(0.8) }
+                        }
+                    }
+                    .disabled(isInitializingSchema)
+                } header: {
+                    Text("Developer")
+                } footer: {
+                    Text("Debug builds only. Uploads representative records so Development includes new fields (e.g. CD_saleDate). Then deploy Development → Production in CloudKit Console for TestFlight.")
+                }
+                #endif
             }
             .scrollContentBackground(.hidden)
             .background(TartanView().ignoresSafeArea().opacity(0.20))
@@ -209,6 +240,11 @@ struct SettingsView: View {
                 Button("OK") { exportError = nil }
             } message: {
                 Text(exportError ?? "")
+            }
+            .alert("CloudKit Schema", isPresented: .constant(schemaInitMessage != nil)) {
+                Button("OK") { schemaInitMessage = nil }
+            } message: {
+                Text(schemaInitMessage ?? "")
             }
             .sheet(isPresented: $showingExportShare, onDismiss: cleanupExportFile) {
                 if let exportURL {

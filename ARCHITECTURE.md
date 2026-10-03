@@ -131,6 +131,15 @@ Raw string fields on `ClothingItem` are exposed through typed computed propertie
 
 Both stores use container `iCloud.com.stevedaurora.cedar` with persistent history tracking and remote change notifications enabled. The view context merges automatically with `NSMergeByPropertyObjectTrumpMergePolicy`.
 
+### CloudKit schema lifecycle
+
+| Environment | Used by | How schema is updated |
+|-------------|---------|------------------------|
+| **Development** | Xcode Debug builds | `PersistenceController.initializeDevelopmentSchema()` (Settings → Developer, Debug only) — private store only; physical device recommended |
+| **Production** | TestFlight / App Store | Deploy Development → Production in [CloudKit Console](https://icloud.developer.apple.com/dashboard) |
+
+Core Data attributes map to CloudKit fields with a `CD_` prefix and the same camelCase name (`saleDate` → `CD_saleDate`). Adding model fields without deploying Production causes TestFlight export failures (`CKError.partialFailure` / `CKErrorDomain error 2`) while local data remains intact.
+
 ### Sync Monitoring
 
 `CloudKitSyncMonitor` (`Persistence/CloudKitSyncMonitor.swift`) is a `@MainActor @Observable` singleton that backs **Settings → iCloud Sync**:
@@ -242,6 +251,7 @@ After acceptance, shared items live in the **Shared** store configuration. The p
 | Anthropic API Key | Key storage (`@AppStorage`, device-only) |
 | AI Features | Whether description/price wands are enabled |
 | iCloud Sync | Account status and latest sync activity from `CloudKitSyncMonitor`, refresh button |
+| Developer (Debug only) | Initialize CloudKit Development Schema |
 | Family Sharing | "Share Closet…" → `PersistenceController.prepareShare()` → `CloudSharingView` |
 | Data | Import from CSV; export to CSV or JSON via share sheet |
 | About | App version |

@@ -68,6 +68,43 @@ duplicate build numbers for the same app.
    App Sandbox entitlements in `Rack/Cedar-Mac.entitlements` (wired via
    `CODE_SIGN_ENTITLEMENTS[sdk=macosx*]` in `project.yml`). iOS uses
    `Cedar.entitlements`.
+8. **CloudKit field names** — Core Data attribute `saleDate` appears in
+   CloudKit Console as **`CD_saleDate`** (camelCase, `CD_` prefix). Same for
+   `CD_donatedDate`. Do not look for `CD_sale_date`.
+
+## CloudKit schema (Development vs Production)
+
+TestFlight and App Store builds use the **Production** CloudKit database.
+Xcode Debug builds use **Development**. Adding Core Data attributes is not
+enough for TestFlight — Production must receive those fields via a schema
+deploy.
+
+### When you add or change model fields
+
+1. Update `PersistenceController.makeModel()`, the `NSManagedObject`
+   subclass, UI/drafts, and CSV/JSON columns together.
+2. Run a **Debug** build on a **physical device** signed into iCloud
+   (simulators often fail schema init with opaque Core Data errors).
+3. In the app: **Settings → Developer → Initialize CloudKit Development
+   Schema** (`#if DEBUG` only; calls
+   `PersistenceController.initializeDevelopmentSchema()`).
+4. In [CloudKit Console](https://icloud.developer.apple.com/dashboard) →
+   container `iCloud.com.stevedaurora.cedar` → **Development** → Schema →
+   Record Types → confirm new fields on `CD_ClothingItem` (etc.).
+5. **Deploy Schema Changes…** from Development → **Production**.
+6. Confirm Production shows the same fields, then retest the TestFlight
+   build (**Settings → iCloud Sync**).
+
+### Implementation notes
+
+- Schema init uses a **private-store-only** temporary
+  `NSPersistentCloudKitContainer`. The Shared store cannot accept schema
+  init writes; do not call `initializeCloudKitSchema` on the live dual-store
+  container expecting it to work cleanly.
+- Init must not block the main actor (`loadPersistentStores` may callback
+  on main). The current API is `async` and runs work off the main queue.
+- After Production deploy, record types/fields are additive forever — you
+  can add fields, but not rename or delete them in Production.
 
 ## Gotchas already diagnosed and fixed — don't rediscover these
 
@@ -103,6 +140,20 @@ chronological order:
    the same ASC agreement / permission gate as #6, not a missing app record.
    Confirm `xcrun altool --list-apps` can see Cedar before debugging bundle
    IDs.
+9. **TestFlight Export failed: `CKErrorDomain error 2`** — that is
+   `CKError.partialFailure`. Very often the Production schema is missing a
+   new Core Data field. Example (1.1): Production had `CD_donatedDate` but
+   not `CD_saleDate`; Development was also missing `CD_saleDate` until
+   schema init on a device. Local inventory still works; only iCloud export
+   fails. Fix: initialize Development schema → deploy to Production (see
+   above). `CloudKitSyncMonitor` unpacks partial errors more fully in newer
+   builds.
+10. **CloudKit schema init fails in Simulator** — common; error may only
+    say "A Core Data error occurred." Use a physical device with iCloud
+    signed in. The Developer → Initialize Schema button is Debug-only.
+11. **Schema init must not use `DispatchGroup.wait()` on the main actor** —
+    can deadlock or fail oddly when `loadPersistentStores` callbacks hit
+    main. Use the async private-store path in `PersistenceController`.
 
 ## Release pipeline (CLI)
 
@@ -129,7 +180,9 @@ Archive uses `-allowProvisioningUpdates`. Export options live in
 - Do not commit secrets, `.p8` keys, or local `.cursor/` / `.claude/` state.
 - Commit messages explain *why* (follow recent `git log` style).
 - When adding Core Data fields: update `makeModel()`, the managed object
-  subclass, drafts/UI, and CSV/JSON import-export columns together.
+  subclass, drafts/UI, and CSV/JSON import-export columns together — **and**
+  run Development schema init on a device, then deploy to Production before
+  expecting TestFlight sync to work.
 - Photos are intentionally excluded from CSV/JSON export — do not "fix"
   that unless asked.
 
@@ -138,4 +191,5 @@ Archive uses `-allowProvisioningUpdates`. Export options live in
 Grep the symptom in `README.md`, `ARCHITECTURE.md`, this file, and
 `git log` first. Several issues look like generic signing or CloudKit
 failures but already have project-specific root causes (PLA vs cert, ASC
-agreements vs missing app, `Default` vs `Private` zone names).
+agreements vs missing app, `Default` vs `Private` zone names, Production
+schema missing new `CD_*` fields vs network/auth).
