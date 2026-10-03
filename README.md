@@ -96,7 +96,7 @@ Never commit the `.p8` file. Processing usually takes 5–15 minutes before the 
 
 **Version and build number**
 
-`CFBundleShortVersionString` (marketing version) and `CFBundleVersion` (build number) are set directly in `Rack/Info.plist`. Current shipping line: **1.1** (build **3**). App Store Connect rejects an upload whose build number was already used for that version, so bump `CFBundleVersion` before each new upload.
+`CFBundleShortVersionString` (marketing version) and `CFBundleVersion` (build number) are set directly in `Rack/Info.plist`. Current shipping line: **1.1** (build **4**). App Store Connect rejects an upload whose build number was already used for that version, so bump `CFBundleVersion` before each new upload.
 
 Transporter or Xcode → Organizer → Distribute App still work as manual alternatives for uploading `build/export/Cedar.ipa`.
 

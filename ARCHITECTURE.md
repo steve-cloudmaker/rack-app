@@ -336,7 +336,7 @@ InventoryListView.onDelete
 - **XcodeGen** — `project.yml` generates `Cedar.xcodeproj`; re-run `xcodegen generate` after changing it
 - **Bundle ID** — `com.stevedaurora.cedar`
 - **Display name** — Cedar Closet Manager (set in `Info.plist`)
-- **Version / build** — `CFBundleShortVersionString` and `CFBundleVersion` in `Rack/Info.plist` (currently **1.1** / build **3**)
+- **Version / build** — `CFBundleShortVersionString` and `CFBundleVersion` in `Rack/Info.plist` (currently **1.1** / build **4**)
 - **Platforms** — iPhone, iPad, Mac Catalyst (`SUPPORTS_MACCATALYST: YES`)
 - **Signing** — Automatic, `DEVELOPMENT_TEAM: J7MM7A8SK8` (set in `project.yml` so command-line builds can sign)
 - **Entitlements** — `Rack/Cedar.entitlements` (iOS: CloudKit container); `Rack/Cedar-Mac.entitlements` for `sdk=macosx*` (App Sandbox, network client, user-selected files, CloudKit)

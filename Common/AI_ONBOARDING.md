@@ -25,11 +25,10 @@ both names are historical but wired into entitlements, docs, and habits.
 ## Current release state (as of 2026-10-02)
 
 - Marketing version: **1.1** (`CFBundleShortVersionString` in `Rack/Info.plist`)
-- Build: **3** (`CFBundleVersion`)
+- Build: **4** (`CFBundleVersion`)
 - CLI TestFlight archive + upload workflow is complete and proven
-- Build 3 was uploaded successfully (Delivery UUID
-  `f262a037-f4ce-4d45-b749-a11ba122d817`); processing happens in App Store
-  Connect → TestFlight
+- Build 4 adds richer iCloud sync status (last import/export times, device vs
+  iCloud counts) and **Push All Items to iCloud**
 
 Before every new upload, bump `CFBundleVersion`. App Store Connect rejects
 duplicate build numbers for the same app.
