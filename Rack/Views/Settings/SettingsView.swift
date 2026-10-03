@@ -23,6 +23,8 @@ struct SettingsView: View {
     @State private var exportError: String?
     @State private var isInitializingSchema = false
     @State private var schemaInitMessage: String?
+    @State private var isPushingAll = false
+    @State private var pushAllMessage: String?
 
     private enum ExportFormat {
         case csv, json
@@ -92,20 +94,53 @@ struct SettingsView: View {
 
                 Section {
                     LabeledContent("Status", value: accountStatusLabel)
-                    LabeledContent("Activity", value: CloudKitSyncMonitor.shared.lastEventMessage)
+                    LabeledContent("This device", value: "\(CloudKitSyncMonitor.shared.localCountSummary) items")
+                    LabeledContent("iCloud", value: "\(CloudKitSyncMonitor.shared.iCloudCountSummary) items")
+                    LabeledContent("Last export", value: CloudKitSyncMonitor.shared.lastExportSummary)
+                    LabeledContent("Last import", value: CloudKitSyncMonitor.shared.lastImportSummary)
+                    LabeledContent("Activity", value: CloudKitSyncMonitor.shared.activityMessage)
                     if CloudKitSyncMonitor.shared.isSyncing {
                         HStack {
                             ProgressView()
-                            Text("Syncing with iCloud…")
+                            Text(CloudKitSyncMonitor.shared.activeOperation.map { "\($0) in progress…" } ?? "Syncing with iCloud…")
                         }
                     }
-                    Button("Refresh iCloud Status") {
-                        Task { await CloudKitSyncMonitor.shared.refreshAccountStatus() }
+                    Button("Refresh Status & Counts") {
+                        Task {
+                            await CloudKitSyncMonitor.shared.refreshAccountStatus()
+                            await CloudKitSyncMonitor.shared.refreshCounts(context: managedObjectContext)
+                        }
                     }
+                    .disabled(CloudKitSyncMonitor.shared.isRefreshingCounts || isPushingAll)
+
+                    Button {
+                        isPushingAll = true
+                        Task {
+                            defer { isPushingAll = false }
+                            do {
+                                let count = try CloudKitSyncMonitor.shared.pushAllItemsToiCloud(context: managedObjectContext)
+                                pushAllMessage = "Marked \(count) item(s) for upload. Keep Cedar open until Last export updates and iCloud count catches up."
+                                await CloudKitSyncMonitor.shared.refreshCounts(context: managedObjectContext)
+                            } catch {
+                                pushAllMessage = "Push failed: \(error.localizedDescription)"
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Label("Push All Items to iCloud", systemImage: "icloud.and.arrow.up")
+                            Spacer()
+                            if isPushingAll { ProgressView().scaleEffect(0.8) }
+                        }
+                    }
+                    .disabled(!hasItems || isPushingAll || CloudKitSyncMonitor.shared.isSyncing)
                 } header: {
                     Text("iCloud Sync")
                 } footer: {
-                    Text(CloudKitSyncMonitor.shared.accountStatusMessage)
+                    Text("""
+                    \(CloudKitSyncMonitor.shared.accountStatusMessage)
+
+                    \(CloudKitSyncMonitor.shared.countsFooter)
+                    """)
                 }
 
                 Section {
@@ -215,6 +250,7 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .task {
                 await CloudKitSyncMonitor.shared.refreshAccountStatus()
+                await CloudKitSyncMonitor.shared.refreshCounts(context: managedObjectContext)
             }
             .sheet(item: $shareConfig) { config in
                 CloudSharingView(share: config.share, container: config.container) {
@@ -245,6 +281,11 @@ struct SettingsView: View {
                 Button("OK") { schemaInitMessage = nil }
             } message: {
                 Text(schemaInitMessage ?? "")
+            }
+            .alert("Push to iCloud", isPresented: .constant(pushAllMessage != nil)) {
+                Button("OK") { pushAllMessage = nil }
+            } message: {
+                Text(pushAllMessage ?? "")
             }
             .sheet(isPresented: $showingExportShare, onDismiss: cleanupExportFile) {
                 if let exportURL {
